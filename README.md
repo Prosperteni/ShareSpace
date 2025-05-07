@@ -1,28 +1,28 @@
-# Play - Free Tailwind CSS Template for Startup, Apps and SaaS
+# ShareSpace - A Student-Driven Campus Swapping Platform
 
-Play is an open-source and free Tailwind CSS template co-created by TailGrids and UIdeck. This template specially crafted for SaaS, startup, business and software website.
-Play crafted in a way that you can use with almost all sort of web project. This is Tailwind CSS template built using [TailGrids](https://tailgrids.com/) components.
+ShareSpace is a platform designed by students, for students. It empowers you to exchange items and resources within your campus community. Whether you're in need of something urgently or looking to pass along items you no longer use, ShareSpace makes the process easy, fast, and secure. Join us in building a sustainable and collaborative campus environment where sharing is second nature.
 
-### This template crafted using 🥞 [TailGrids](https://tailgrids.com/) UI components
+### [🚀 View Project](https://github.com/Prosperteni/ShareSpace)
 
-### [🚀 View Demo](https://play-tailwind.tailgrids.com/)
+### 🌟 Features
+- 🔁 Item Swapping Made Easy
+List items you no longer need and find fellow students willing to exchange—no payments involved, just mutual benefit.
+- 🧠 Smart Matchmaking
+A built-in recommendation system suggests the best swap partners based on listed items and individual preferences.
 
-### [⬇️ Download Now](https://links.tailgrids.com/play-download)
+- 🎓 Campus-Only Community
+ShareSpace is limited to students within your campus, ensuring safer, faster, and more convenient item exchanges.
 
-[![play-tailwind](https://cdn.tailgrids.com/play-tailwind.jpg)](https://play-tailwind.tailgrids.com/)
+- 📱 Simple Listings & Requests
+Post what you have or need quickly using an intuitive, mobile-friendly interface.
 
 ## 📃 License
 
-Play is an open-source template, you can use it with your personal or commercial projects without any attribution or backlink.
+ShareSpace is an open-source project. You're welcome to use, adapt, and share it for personal or academic purposes—no attribution required.
 
 ## 💙 Support
 
-You can always support this project by [Starring🌟 This Repository](https://github.com/tailgrids/play-tailwind)
-and sharing with friends. Also open an issue if you find bug or feel free to contribute by pull requests after fixing any issue or adding more values.
+If you find ShareSpace helpful, consider starring the repository and sharing it with your fellow students. Contributions are also welcome—submit a pull request or open an issue with suggestions!
+You can always support this project by [Starring🌟 This Repository](https://github.com/Prosperteni/ShareSpace)
 
-### Update Logs: 2.0 - Nov 2023
-- Design refresh
-- New marketing section
-- Dark mode support
-- Code and performance optimization
-- Updated dependencies
+

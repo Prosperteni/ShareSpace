@@ -2010,6 +2010,7 @@ body {
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
+/* color change on scroll */
 .sticky #navbarCollapse li > a{
   --tw-text-opacity: 1;
   color: rgb(17 25 40 / var(--tw-text-opacity));
