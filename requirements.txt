@@ -1,7 +1,5 @@
 Flask
 Flask-Session
 Werkzeug
+waitress
 
-
-
-# flask run -p 5001
