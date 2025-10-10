@@ -6,9 +6,7 @@ import os
 
 # --- DATABASE CONFIG ---
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-DB_DIR = os.path.join(BASE_DIR, "instance")  # store DB in /instance folder (standard Flask convention)
-os.makedirs(DB_DIR, exist_ok=True)  # create if not exists
-DB_PATH = os.path.join(DB_DIR, "users.db")  # final absolute path to DB
+DB_PATH = os.path.join(BASE_DIR, "users.db")  # store DB in project root
 
 # --- FLASK CONFIG ---
 app = Flask(__name__)
@@ -104,9 +102,6 @@ def page_not_found(e):
     return render_template("404.html"), 404
 
 if __name__ == "__main__":
-    if not os.path.exists(DB_PATH):
-        print("⚠️ Database not found at:", DB_PATH)
-        print("Run create_db.py first to initialize the users table.")
-    else:
-        print("✅ Using database:", DB_PATH)
-    app.run(debug=True)
+    from waitress import serve
+    serve(app, host="0.0.0.0", port=8080)
+
