@@ -2,7 +2,7 @@
 
 ShareSpace is a platform designed by students, for students. It empowers you to exchange items and resources within your campus community. Whether you're in need of something urgently or looking to pass along items you no longer use, ShareSpace makes the process easy, fast, and secure. Join us in building a sustainable and collaborative campus environment where sharing is second nature.
 
-### [🚀 View Project]([https://sharespace-l3l2.onrender.com/])
+### [🚀 View Project](https://sharespace-l3l2.onrender.com/)
 
 ### 🌟 Features
 - 🔁 Item Swapping Made Easy
