@@ -24,7 +24,7 @@
     <div class="container">
       <div class="relative flex items-center justify-between -mx-4">
         <div class="max-w-full px-4 w-60">
-          <a href="index.html" class="block w-full py-5 navbar-logo">
+          <a href="{{ url_for('index') }}" class="block w-full py-5 navbar-logo">
             <img src="../static/images/logo/logo.svg" alt="logo" class="w-full dark:hidden" />
             <img src="../static/images/logo/logo-white.svg" alt="logo" class="hidden w-full dark:block" />
           </a>
@@ -47,21 +47,19 @@
                   </a>
                 </li>
                 <li class="relative group">
-                  <a href="Browse-Items.html"
-                  target="_blank"
+                  <a href="{{ url_for('index') }}#features"
                     class="flex py-2 mx-8 text-base font-medium ud-menu-scroll text-dark dark:text-white group-hover:text-primary lg:mr-0 lg:ml-7 lg:inline-flex lg:py-6 lg:px-0 lg:text-body-color dark:lg:text-dark-6 xl:ml-10">
-                    Browse Items
+                  Features
                   </a>
                 </li>
                 <li class="relative group">
-                  <a href="Post-Item.html"
-                  target="_blank"
+                  <a href="{{ url_for('index') }}#about"
                     class="flex py-2 mx-8 text-base font-medium ud-menu-scroll text-dark dark:text-white group-hover:text-primary lg:mr-0 lg:ml-7 lg:inline-flex lg:py-6 lg:px-0 lg:text-body-color dark:lg:text-dark-6 xl:ml-10">
-                    Post an Item
+                    About
                   </a>
                 </li>
                 <li class="relative group">
-                  <a href="#contact"
+                  <a href="{{ url_for('index') }}#contact"
                     class="flex py-2 mx-8 text-base font-medium ud-menu-scroll text-dark dark:text-white group-hover:text-primary lg:mr-0 lg:ml-7 lg:inline-flex lg:py-6 lg:px-0 lg:text-body-color dark:lg:text-dark-6 xl:ml-10">
                     Contact
                   </a>
@@ -105,7 +103,7 @@
 
             <ul class="flex items-center justify-center gap-[10px]">
               <li>
-                <a href="index.html"
+                <a href="{{ url_for('index') }}"
                   class="flex items-center gap-[10px] text-base font-medium text-dark dark:text-white">
                   Home
                 </a>

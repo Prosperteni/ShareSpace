@@ -19,11 +19,11 @@
 
 <body>
   <!-- ====== Navbar Section Start -->
-  <div cl ="absolute top-0 left-0 z-40 flex items-center w-full bg-transparent ud-header">
+  <div class="absolute top-0 left-0 z-40 flex items-center w-full bg-transparent ud-header">
     <div class="container">
       <div class="relative flex items-center justify-between -mx-4">
         <div class="max-w-full px-4 w-60">
-          <a href="index.html" class="block w-full py-5 navbar-logo">
+          <a href="{{ url_for('index') }}" class="block w-full py-5 navbar-logo">
             <img src="../static/images/logo/logo.svg" alt="logo" class="w-full dark:hidden" />
             <img src="../static/images/logo/logo-white.svg" alt="logo" class="hidden w-full dark:block" />
           </a>
@@ -46,21 +46,19 @@
                   </a>
                 </li>
                 <li class="relative group">
-                  <a href="Browse-Items.html"
-                  target="_blank"
+                  <a href="{{ url_for('index') }}#features"
                     class="flex py-2 mx-8 text-base font-medium ud-menu-scroll text-dark dark:text-white group-hover:text-primary lg:mr-0 lg:ml-7 lg:inline-flex lg:py-6 lg:px-0 lg:text-body-color dark:lg:text-dark-6 xl:ml-10">
-                    Browse Items
+                  Features
                   </a>
                 </li>
                 <li class="relative group">
-                  <a href="Post-Item.html"
-                  target="_blank"
+                  <a href="{{ url_for('index') }}#about"
                     class="flex py-2 mx-8 text-base font-medium ud-menu-scroll text-dark dark:text-white group-hover:text-primary lg:mr-0 lg:ml-7 lg:inline-flex lg:py-6 lg:px-0 lg:text-body-color dark:lg:text-dark-6 xl:ml-10">
-                    Post an Item
+                    About
                   </a>
                 </li>
                 <li class="relative group">
-                  <a href="#contact"
+                  <a href="{{ url_for('index') }}#contact"
                     class="flex py-2 mx-8 text-base font-medium ud-menu-scroll text-dark dark:text-white group-hover:text-primary lg:mr-0 lg:ml-7 lg:inline-flex lg:py-6 lg:px-0 lg:text-body-color dark:lg:text-dark-6 xl:ml-10">
                     Contact
                   </a>
@@ -104,7 +102,7 @@
 
             <ul class="flex items-center justify-center gap-[10px]">
               <li>
-                <a href="index.html"
+                <a href="{{ url_for('index') }}"
                   class="flex items-center gap-[10px] text-base font-medium text-dark dark:text-white">
                   Home
                 </a>
@@ -142,13 +140,14 @@
                 <p class="text-red mb-4 font-bold">{{ error }}</p>
               {% endif %}
               <div class="mb-[22px]">
-                <input type="text" placeholder="username" name="username"
+                <input type="text" placeholder="Username" name="username"
                   class="w-full px-5 py-3 text-base transition bg-transparent border rounded-md outline-none border-stroke dark:border-dark-3 text-body-color dark:text-dark-6 placeholder:text-dark-6 focus:border-primary dark:focus:border-primary focus-visible:shadow-none" />
               </div>
-              <div class="mb-[22px]">
-                <input type="password" placeholder="Password" name="password"
-                  class="w-full px-5 py-3 text-base transition bg-transparent border rounded-md outline-none border-stroke dark:border-dark-3 text-body-color dark:text-dark-6 placeholder:text-dark-6 focus:border-primary dark:focus:border-primary focus-visible:shadow-none" />
-              </div>
+            <div class="mb-[22px] relative">
+              <input type="password" placeholder="Password" name="password"
+                class="w-full px-5 py-3 text-base transition bg-transparent border rounded-md outline-none border-stroke dark:border-dark-3 text-body-color dark:text-dark-6 placeholder:text-dark-6 focus:border-primary dark:focus:border-primary focus-visible:shadow-none" />
+              <i id="togglePassword" class="bi bi-eye-fill absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"></i>
+            </div>
               <div class="mb-9">
                 <input type="submit" value="Sign In"
                   class="w-full px-5 py-3 text-base text-white transition duration-300 ease-in-out border rounded-md cursor-pointer border-primary bg-primary hover:bg-blue-dark" />
@@ -160,7 +159,7 @@
             </a>
             <p class="text-base text-body-secondary">
               Not a member yet?
-              <a href="signup.html" class="text-primary hover:underline">
+              <a href="{{ url_for('signup') }}" class="text-primary hover:underline">
                 Sign Up
               </a>
             </p>
