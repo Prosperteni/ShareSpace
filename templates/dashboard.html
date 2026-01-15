@@ -1,9 +1,45 @@
-<!doctype html>
-<html>
-<head><title>Dashboard</title></head>
-<body>
-  <h1>Dashboard</h1>
-  <p>Welcome, {{ username }}</p>
-  <p><a href="/">Home</a> | <a href="/logout">Logout</a></p>
+<body class="bg-gray-100 dark:bg-dark">
+
+  <div class="flex h-screen">
+
+    <!-- ===== Sidebar -->
+    <aside class="w-64 bg-white dark:bg-dark-2 shadow-lg flex flex-col">
+      
+      <!-- Logo -->
+      <div class="h-16 flex items-center justify-center border-b dark:border-dark-3">
+        <span class="text-xl font-bold text-primary">ShareSpace</span>
+      </div>
+
+      <!-- Nav -->
+      <nav class="flex-1 px-4 py-6 space-y-2">
+        <a href="{{ url_for('dashboard') }}" class="sidebar-link active">
+          Dashboard
+        </a>
+        <a href="{{ url_for('browse_items') }}" class="sidebar-link">
+          Browse Items
+        </a>
+        <a href="{{ url_for('my_items') }}" class="sidebar-link">
+          My Items
+        </a>
+        <a href="{{ url_for('add_item') }}" class="sidebar-link">
+          Add Item
+        </a>
+      </nav>
+
+      <!-- Bottom -->
+      <div class="p-4 border-t dark:border-dark-3">
+        <a href="{{ url_for('logout') }}" class="text-red-500 font-medium">
+          Logout
+        </a>
+      </div>
+
+    </aside>
+
+    <!-- ===== Main Content -->
+    <main class="flex-1 overflow-y-auto p-6">
+      {% block content %}{% endblock %}
+    </main>
+
+  </div>
+
 </body>
-</html>
