@@ -4,6 +4,8 @@
   // ======= Sticky
   window.onscroll = function () {
     const ud_header = document.querySelector(".ud-header");
+    if (!ud_header) return; // Add this check
+    
     const sticky = ud_header.offsetTop;
     const logo = document.querySelectorAll(".header-logo");
 
@@ -36,13 +38,15 @@
 
     // show or hide the back-top-top button
     const backToTop = document.querySelector(".back-to-top");
-    if (
-      document.body.scrollTop > 50 ||
-      document.documentElement.scrollTop > 50
-    ) {
-      backToTop.style.display = "flex";
-    } else {
-      backToTop.style.display = "none";
+    if (backToTop) {
+      if (
+        document.body.scrollTop > 50 ||
+        document.documentElement.scrollTop > 50
+      ) {
+        backToTop.style.display = "flex";
+      } else {
+        backToTop.style.display = "none";
+      }
     }
   };
 
@@ -50,20 +54,22 @@
   let navbarToggler = document.querySelector("#navbarToggler");
   const navbarCollapse = document.querySelector("#navbarCollapse");
 
-  navbarToggler.addEventListener("click", () => {
-    navbarToggler.classList.toggle("navbarTogglerActive");
-    navbarCollapse.classList.toggle("hidden");
-  });
+  if (navbarToggler && navbarCollapse) {
+    navbarToggler.addEventListener("click", () => {
+      navbarToggler.classList.toggle("navbarTogglerActive");
+      navbarCollapse.classList.toggle("hidden");
+    });
 
-  //===== close navbar-collapse when a  clicked
-  document
-    .querySelectorAll("#navbarCollapse ul li:not(.submenu-item) a")
-    .forEach((e) =>
-      e.addEventListener("click", () => {
-        navbarToggler.classList.remove("navbarTogglerActive");
-        navbarCollapse.classList.add("hidden");
-      })
-    );
+    //===== close navbar-collapse when a  clicked
+    document
+      .querySelectorAll("#navbarCollapse ul li:not(.submenu-item) a")
+      .forEach((e) =>
+        e.addEventListener("click", () => {
+          navbarToggler.classList.remove("navbarTogglerActive");
+          navbarCollapse.classList.add("hidden");
+        })
+      );
+  }
 
   // ===== Sub-menu
   const submenuItems = document.querySelectorAll(".submenu-item");
@@ -114,57 +120,24 @@
     return (-c / 2) * (t * (t - 2) - 1) + b;
   };
 
-  document.querySelector(".back-to-top").onclick = () => {
-    scrollTo(document.documentElement);
-  };
+  const backToTopBtn = document.querySelector(".back-to-top");
+  if (backToTopBtn) {
+    backToTopBtn.onclick = () => {
+      scrollTo(document.documentElement);
+    };
+  }
 
-    /* ========  themeSwitcher start ========= */
+  // ===== Password Toggle
+  const togglePassword = document.querySelector('#togglePassword');
+  const password = document.querySelector('input[name="password"]');
 
-  // themeSwitcher
-  const themeSwitcher = document.getElementById('themeSwitcher');
-
-  // Theme Vars
-  const userTheme = localStorage.getItem('theme');
-  const systemTheme = window.matchMedia('(prefers-color0scheme: dark)').matches;
-
-  // Initial Theme Check
-  const themeCheck = () => {
-    if (userTheme === 'dark' || (!userTheme && systemTheme)) {
-      document.documentElement.classList.add('dark');
-      return;
-    }
-  };
-
-  // Manual Theme Switch
-  const themeSwitch = () => {
-    if (document.documentElement.classList.contains('dark')) {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
-      return;
-    }
-
-    document.documentElement.classList.add('dark');
-    localStorage.setItem('theme', 'dark');
-  };
-
-  // call theme switch on clicking buttons
-  themeSwitcher.addEventListener('click', () => {
-    themeSwitch();
-  });
-
-  // invoke theme check on initial load
-  themeCheck();
-  /* ========  themeSwitcher End ========= */
-
-  // Password visibility toggle
-  const passwordInput = document.getElementById('password');
-  const togglePassword = document.getElementById('togglePassword');
-
+  if (togglePassword && password) {
     togglePassword.addEventListener('click', () => {
-        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-        passwordInput.setAttribute('type', type);
-        togglePassword.classList.toggle('bi-eye-fill');
-        togglePassword.classList.toggle('bi-eye-slash-fill');
-        });
+      const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+      password.setAttribute('type', type);
+      togglePassword.classList.toggle('bi-eye');
+      togglePassword.classList.toggle('bi-eye-fill');
+    });
+  }
 
 })();

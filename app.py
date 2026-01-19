@@ -93,6 +93,11 @@ def dashboard():
         return redirect(url_for("signin"))
     return render_template("dashboard.html", username=session["username"])
 
+@app.route('/browseItems')
+def browse_items():
+    return render_template('browseItems.html')
+
+
 @app.route("/logout")
 def logout():
     session.clear()
