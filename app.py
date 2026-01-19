@@ -102,7 +102,12 @@ def logout():
 def page_not_found(e):
     return render_template("404.html"), 404
 
+
 if __name__ == "__main__":
     from waitress import serve
-    serve(app, host="0.0.0.0", port=8080)
+    if os.getenv('FLASK_ENV') == 'production':
+        serve(app, host="0.0.0.0", port=8080)  # Production server
+    else:
+        app.run(debug=True, host="0.0.0.0", port=8080)  # Development server
 
+# how to rubn... python -m flask run
