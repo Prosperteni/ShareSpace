@@ -1890,6 +1890,11 @@ body {
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 
+.h-screen {
+  height: 100vh;
+}
+
+
 .shadow-2{
   --tw-shadow: 0px 5px 12px 0px rgba(0, 0, 0, 0.10);
   --tw-shadow-colored: 0px 5px 12px 0px var(--tw-shadow-color);
@@ -2312,6 +2317,10 @@ body {
 
 .group:hover .group-hover\:opacity-100{
   opacity: 1;
+}
+.bg-slate-900 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(15 23 42 / var(--tw-bg-opacity));
 }
 
 :is(.dark .dark\:block){

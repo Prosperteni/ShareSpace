@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}ShareSpace{% endblock %}</title>
+
+    <!-- Tailwind -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/tailwind.css') }}">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Icons -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body class="bg-gray-1 dark:bg-dark">
+
+{% set ACTIVE = "text-white bg-primary bg-opacity-10 border-r-4 border-primary" %}
+{% set INACTIVE = "text-gray-7 hover:text-white hover:bg-dark-3" %}
+
+<!-- Sidebar -->
+<aside class="fixed left-0 top-0 z-50 h-screen w-64 bg-dark border-r border-dark-3
+              overflow-y-auto flex flex-col">
+
+    <!-- Logo -->
+    <div class="px-6 py-8 border-b border-dark-3">
+        <h2 class="text-2xl font-bold text-white">
+            Share<span class="text-primary">Space</span>
+        </h2>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="px-3 py-6 space-y-1">
+
+        <a href="{{ url_for('dashboard') }}"
+           class="flex items-center gap-3 px-4 py-3 rounded-lg transition
+                  {% block nav_dashboard %}{{ INACTIVE }}{% endblock %}">
+            <i class="fas fa-home w-5 text-lg"></i>
+            <span class="font-medium">Dashboard</span>
+        </a>
+
+        <a href="{{ url_for('browse_items') }}"
+           class="flex items-center gap-3 px-4 py-3 rounded-lg transition
+                  {% block nav_browse %}{{ INACTIVE }}{% endblock %}">
+            <i class="fas fa-exchange-alt w-5 text-lg"></i>
+            <span class="font-medium">Browse Items</span>
+        </a>
+
+        <a href="{{ url_for('my_listings') }}"
+           class="flex items-center gap-3 px-4 py-3 rounded-lg transition
+                  {% block nav_listings %}{{ INACTIVE }}{% endblock %}">
+            <i class="fas fa-box w-5 text-lg"></i>
+            <span class="font-medium">My Listings</span>
+        </a>
+
+        <a href="{{ url_for('swap_requests') }}"
+           class="flex items-center gap-3 px-4 py-3 rounded-lg transition
+                  {% block nav_requests %}{{ INACTIVE }}{% endblock %}">
+            <i class="fas fa-handshake w-5 text-lg"></i>
+            <span class="font-medium">Swap Requests</span>
+        </a>
+
+        <a href="{{ url_for('saved_items') }}"
+           class="flex items-center gap-3 px-4 py-3 rounded-lg transition
+                  {% block nav_saved %}{{ INACTIVE }}{% endblock %}">
+            <i class="fas fa-heart w-5 text-lg"></i>
+            <span class="font-medium">Saved Items</span>
+        </a>
+
+        <a href="{{ url_for('notifications') }}"
+           class="flex items-center gap-3 px-4 py-3 rounded-lg transition
+                  {% block nav_notifications %}{{ INACTIVE }}{% endblock %}">
+            <i class="fas fa-bell w-5 text-lg"></i>
+            <span class="font-medium">Notifications</span>
+        </a>
+
+        <a href="{{ url_for('profile') }}"
+           class="flex items-center gap-3 px-4 py-3 rounded-lg transition
+                  {% block nav_profile %}{{ INACTIVE }}{% endblock %}">
+            <i class="fas fa-user w-5 text-lg"></i>
+            <span class="font-medium">Profile</span>
+        </a>
+
+        <a href="{{ url_for('settings') }}"
+           class="flex items-center gap-3 px-4 py-3 rounded-lg transition
+                  {% block nav_settings %}{{ INACTIVE }}{% endblock %}">
+            <i class="fas fa-cog w-5 text-lg"></i>
+            <span class="font-medium">Settings</span>
+        </a>
+
+    </nav>
+        <!-- User Profile -->
+        
+        <div class="mt-auto pt-6 border-t border-white/10">
+    <div class="flex items-center justify-between">
+        
+        <!-- Profile info -->
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600
+                        flex items-center justify-center text-white font-bold">
+                {{ username[0]|upper }}
+            </div>
+
+            <div>
+                <h4 class="text-white text-sm font-semibold">{{ username }}</h4>
+                <p class="text-xs text-slate-400">View Profile</p>
+            </div>
+        </div>
+
+        <!-- Logout button -->
+        <a href="{{ url_for('logout') }}"
+   class="p-2 rounded-lg hover:bg-dark-3 text-slate-300 hover:text-white transition">
+    <i class="fas fa-sign-out-alt"></i>
+</a>
+
+    </div>
+</div>
+
+    </aside>
+
+    <!-- Main Content -->
+    <main class="ml-64 min-h-screen p-8">
+        {% block content %}{% endblock %}
+    </main>
+
+</body>
+</html>

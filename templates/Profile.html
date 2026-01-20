@@ -1,0 +1,64 @@
+{% extends "signedInBase.html" %}
+
+{% block title %}Profile | ShareSpace{% endblock %}
+
+{% block nav_profile %}
+{{ ACTIVE }}
+{% endblock %}
+
+{% block content %}
+
+<div class="max-w-4xl mx-auto space-y-8">
+
+    <!-- Header -->
+    <div>
+        <h1 class="text-2xl font-bold">Profile</h1>
+        <p class="text-slate-400">Manage your personal information</p>
+    </div>
+
+    <!-- Profile Card -->
+    <div class="bg-dark-3 rounded-xl p-6 flex items-center gap-6">
+        <div class="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-purple-600
+                    flex items-center justify-center text-3xl font-bold">
+            {{ username[0]|upper }}
+        </div>
+
+        <div>
+            <h2 class="text-xl font-semibold">{{ username }}</h2>
+            <p class="text-slate-400 text-sm">Active member</p>
+        </div>
+    </div>
+
+    <!-- Profile Details -->
+    <div class="bg-dark-3 rounded-xl p-6">
+        <h3 class="text-lg font-semibold mb-4">Account Details</h3>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <label class="text-sm text-slate-400">Username</label>
+                <p class="mt-1">{{ username }}</p>
+            </div>
+
+            <div>
+                <label class="text-sm text-slate-400">Email</label>
+                <p class="mt-1">{{ email }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="flex gap-4">
+        <a href="{{ url_for('settings') }}"
+           class="px-4 py-2 bg-primary rounded-lg hover:opacity-90 transition">
+            Edit Profile
+        </a>
+
+        <a href="{{ url_for('logout') }}"
+           class="px-4 py-2 bg-red-600 rounded-lg hover:opacity-90 transition">
+            Logout
+        </a>
+    </div>
+
+</div>
+
+{% endblock %}

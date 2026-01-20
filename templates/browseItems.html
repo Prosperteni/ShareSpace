@@ -1,145 +1,128 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "signedInBase.html" %}
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Browse Items | ShareSpace</title>
-  <link rel="shortcut icon" href="assets/images/favicon.png" type="image/x-icon" />
-  <link rel="stylesheet" href="assets/css/animate.css" />
-  <link rel="stylesheet" href="assets/css/tailwind.css" />
+{% block title %}Browse Items – ShareSpace{% endblock %}
 
-  <!-- ==== WOW JS ==== -->
-  <script src="assets/js/wow.min.js"></script>
-  <script>
-    new WOW().init();
-  </script>
-</head>
+{% block nav_browse %}
+{{ ACTIVE }}
+{% endblock %}
 
-<body>
-  <!-- ====== Navbar Section Start -->
-  <div class="absolute top-0 left-0 z-40 flex items-center w-full bg-transparent ud-header">
-    <div class="container">
-      <div class="relative flex items-center justify-between -mx-4">
-        <div class="max-w-full px-4 w-60">
-          <a href="index.html" class="block w-full py-5 navbar-logo">
-            <img src="assets/images/logo/logo.svg" alt="logo" class="w-full dark:hidden" />
-            <img src="assets/images/logo/logo-white.svg" alt="logo" class="hidden w-full dark:block" />
-          </a>
+{% block content %}
+
+<!-- Top Bar -->
+<div class="mb-8">
+    <h1 class="text-3xl font-bold text-dark dark:text-white mb-1">Browse Items</h1>
+    <p class="text-body-color dark:text-dark-6">
+        Find items to swap with fellow students on campus
+    </p>
+</div>
+
+<!-- Search and Filter Bar -->
+<div class="bg-white dark:bg-dark-2 rounded-xl p-6 shadow-lg mb-8">
+    <form action="{{ url_for('browse_items') }}" method="GET"
+          class="flex flex-col md:flex-row gap-4">
+
+        <!-- Search -->
+        <div class="flex-1 relative">
+            <input
+                type="text"
+                name="search"
+                placeholder="Search for items"
+                value="{{ request.args.get('search', '') }}"
+                class="w-full px-5 py-3 pl-12 bg-gray-1 dark:bg-dark border
+                       border-stroke dark:border-dark-3 rounded-lg
+                       text-dark dark:text-white">
+            <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2"></i>
         </div>
-        <div class="flex items-center justify-between w-full px-4">
-          <div>
-            <button id="navbarToggler" class="absolute right-4 top-1/2 block -translate-y-1/2 rounded-lg px-3 py-[6px] ring-primary focus:ring-2 lg:hidden">
-              <span class="relative my-[6px] block h-[2px] w-[30px] bg-dark dark:bg-white"></span>
-              <span class="relative my-[6px] block h-[2px] w-[30px] bg-dark dark:bg-white"></span>
-              <span class="relative my-[6px] block h-[2px] w-[30px] bg-dark dark:bg-white"></span>
-            </button>
-            <nav id="navbarCollapse" class="absolute right-4 top-full hidden w-full max-w-[250px] rounded-lg bg-white py-5 shadow-lg dark:bg-dark-2 lg:static lg:block lg:w-full lg:max-w-full lg:bg-transparent lg:px-4 lg:py-0 lg:shadow-none dark:lg:bg-transparent xl:px-6">
-              <ul class="blcok lg:flex 2xl:ml-20">
-                <li class="relative group"><a href="#home" class="flex py-2 mx-8 text-base font-medium ud-menu-scroll text-dark group-hover:text-primary dark:text-white lg:mr-0 lg:inline-flex lg:px-0 lg:py-6 lg:text-body-color dark:lg:text-dark-6">Home</a></li>
-                <li class="relative group"><a href="/#about" class="flex py-2 mx-8 text-base font-medium ud-menu-scroll text-dark group-hover:text-primary dark:text-white lg:ml-7 lg:mr-0 lg:inline-flex lg:px-0 lg:py-6 lg:text-body-color dark:lg:text-dark-6 xl:ml-10">About</a></li>
-                <li class="relative group"><a href="/#contact" class="flex py-2 mx-8 text-base font-medium ud-menu-scroll text-dark group-hover:text-primary dark:text-white lg:ml-7 lg:mr-0 lg:inline-flex lg:px-0 lg:py-6 lg:text-body-color dark:lg:text-dark-6 xl:ml-10">Contact</a></li>
-                <li class="relative submenu-item group">
-                  <a href="javascript:void(0)" class="relative flex items-center justify-between py-2 mx-8 text-base font-medium text-primary group-hover:text-primary lg:ml-8 lg:mr-0 lg:inline-flex lg:py-6 lg:pl-0 lg:pr-4 xl:ml-10">Pages
-                    <svg class="ml-2 fill-current" width="16" height="20" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M7.99999 14.9C7.84999 14.9 7.72499 14.85 7.59999 14.75L1.84999 9.10005C1.62499 8.87505 1.62499 8.52505 1.84999 8.30005C2.07499 8.07505 2.42499 8.07505 2.64999 8.30005L7.99999 13.525L13.35 8.25005C13.575 8.02505 13.925 8.02505 14.15 8.25005C14.375 8.47505 14.375 8.82505 14.15 9.05005L8.39999 14.7C8.27499 14.825 8.14999 14.9 7.99999 14.9Z" />
-                    </svg>
-                  </a>
-                  <div class="submenu relative left-0 top-full hidden w-[250px] rounded-sm bg-white p-4 transition-[top] duration-300 group-hover:opacity-100 dark:bg-dark-2 lg:invisible lg:absolute lg:top-[110%] lg:block lg:opacity-0 lg:shadow-lg lg:group-hover:visible lg:group-hover:top-full">
-                    <a href="about.html" class="block rounded px-4 py-[10px] text-sm text-primary hover:text-primary dark:hover:text-primary">About Page</a>
-                    <a href="contact.html" class="block rounded px-4 py-[10px] text-sm text-body-color hover:text-primary dark:text-dark-6 dark:hover:text-primary">Contact Page</a>
-                    <a href="signup.html" class="block rounded px-4 py-[10px] text-sm text-body-color hover:text-primary dark:text-dark-6 dark:hover:text-primary">Sign Up Page</a>
-                    <a href="signin.html" class="block rounded px-4 py-[10px] text-sm text-body-color hover:text-primary dark:text-dark-6 dark:hover:text-primary">Sign In Page</a>
-                    <a href="404.html" class="block rounded px-4 py-[10px] text-sm text-body-color hover:text-primary dark:text-dark-6 dark:hover:text-primary">404 Page</a>
-                  </div>
-                </li>
-              </ul>
-            </nav>
-          </div>
+
+        <!-- Category -->
+        <select name="category"
+                class="px-5 py-3 bg-gray-1 dark:bg-dark border rounded-lg">
+            <option value="">All Categories</option>
+            {% for c in ['books','electronics','stationery','furniture','sports','clothing','other'] %}
+            <option value="{{ c }}"
+                {{ 'selected' if request.args.get('category') == c else '' }}>
+                {{ c|capitalize }}
+            </option>
+            {% endfor %}
+        </select>
+
+        <!-- Sort -->
+        <select name="sort"
+                class="px-5 py-3 bg-gray-1 dark:bg-dark border rounded-lg">
+            <option value="newest">Newest First</option>
+            <option value="oldest">Oldest First</option>
+            <option value="popular">Most Popular</option>
+        </select>
+
+        <button class="px-8 py-3 bg-primary text-white rounded-lg font-semibold">
+            <i class="fas fa-search mr-2"></i> Search
+        </button>
+    </form>
+</div>
+
+<!-- Items Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+{% if items %}
+    {% for item in items %}
+    <div class="bg-white dark:bg-dark-2 rounded-xl shadow-lg overflow-hidden">
+
+        <!-- Image -->
+        <div class="h-48 bg-primary flex items-center justify-center text-white">
+            {% if item.image %}
+            <img src="{{ url_for('static', filename='uploads/' + item.image) }}"
+                 class="w-full h-full object-cover">
+            {% else %}
+            <i class="fas fa-box text-6xl"></i>
+            {% endif %}
         </div>
-      </div>
-    </div>
-  </div>
-  <!-- ====== Navbar Section End -->
 
-  <!-- ====== Banner Section Start -->
-  <div class="relative z-10 overflow-hidden pb-[60px] pt-[120px] dark:bg-dark md:pt-[130px] lg:pt-[160px]">
-    <div class="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-stroke/0 via-stroke to-stroke/0 dark:via-dark-3"></div>
-    <div class="container">
-      <div class="flex flex-wrap items-center -mx-4">
-        <div class="w-full px-4">
-          <div class="text-center">
-            <h1 class="mb-4 text-3xl font-bold text-dark dark:text-white sm:text-4xl md:text-[40px] md:leading-[1.2]">ShareSpace - Listing & Request</h1>
-            <p class="mb-5 text-base text-body-color dark:text-dark-6">Browse items to swap or request what you need!</p>
-            <ul class="flex items-center justify-center gap-[10px]">
-              <li><a href="index.html" class="flex items-center gap-[10px] text-base font-medium text-dark dark:text-white">Home</a></li>
-              <li><a href="javascript:void(0)" class="flex items-center gap-[10px] text-base font-medium text-body-color dark:text-dark-6"><span class="text-body-color dark:text-dark-6"> / </span> Listing & Request</a></li>
-            </ul>
-          </div>
+        <!-- Content -->
+        <div class="p-5">
+            <span class="text-xs text-primary font-semibold">
+                {{ item.category|capitalize }}
+            </span>
+
+            <h3 class="text-lg font-bold mt-2">
+                {{ item.name }}
+            </h3>
+
+            <p class="text-sm text-body-color mt-2 line-clamp-2">
+                {{ item.description }}
+            </p>
+
+            <div class="flex justify-between text-xs mt-4">
+                <span><i class="fas fa-user"></i> {{ item.owner_name }}</span>
+                <span><i class="fas fa-map-marker-alt"></i>
+                    {{ item.hostel or 'Campus' }}
+                </span>
+            </div>
+
+            <div class="flex gap-2 mt-4">
+                <a href="/item/{{ item.id }}"
+                   class="flex-1 bg-primary text-white py-2 rounded-lg text-center">
+                    View
+                </a>
+                <button class="px-4 py-2 bg-gray-1 rounded-lg">
+                    <i class="fas fa-heart"></i>
+                </button>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
-  <!-- ====== Banner Section End -->
-
-  <!-- ====== Listing Section Start -->
-  <section id="listing" class="bg-gray-1 pb-8 pt-20 dark:bg-dark-2 lg:pb-[70px] lg:pt-[120px]">
-    <div class="container">
-      <div class="text-center">
-        <h2 class="mb-5 text-3xl font-bold text-dark dark:text-white">Items Available for Exchange</h2>
-        <p class="text-lg text-body-color dark:text-dark-6">Check out the available items listed by other users.</p>
-      </div>
-      <div class="flex flex-wrap items-center justify-center gap-8">
-        <!-- Example Item Listing -->
-        <div class="w-[330px] bg-white shadow-lg rounded-lg p-5 mb-8">
-          <img src="assets/images/items/item-1.jpg" alt="Item 1" class="w-full h-56 object-cover rounded-lg mb-4">
-          <h3 class="text-xl font-semibold text-dark">Item 1</h3>
-          <p class="text-base text-body-color dark:text-dark-6 mb-4">This is a description of the item that is available for exchange.</p>
-          <a href="#" class="text-base text-primary hover:text-primary dark:text-white dark:hover:text-primary">View More</a>
-        </div>
-        <!-- More items can be added similarly -->
-      </div>
+    {% endfor %}
+{% else %}
+    <div class="col-span-full text-center py-12">
+        <h3 class="text-xl font-bold">No items found</h3>
     </div>
-  </section>
-  <!-- ====== Listing Section End -->
+{% endif %}
 
+</div>
 
-  <!-- ====== Footer Section Start -->
-  <footer class="bg-dark text-white py-6">
-    <div class="container text-center">
-      <p>&copy; 2025 ShareSpace. All Rights Reserved.</p>
-    </div>
-  </footer>
-  <!-- ====== Footer Section End -->
+<!-- Floating Add Button -->
+<a href="{{ url_for('my_listings') }}"
+   class="fixed bottom-8 right-8 w-16 h-16 bg-primary text-white
+          rounded-full shadow-xl flex items-center justify-center text-2xl">
+    <i class="fas fa-plus"></i>
+</a>
 
-  <script>
-    // Toggle the navbar on small screens
-    const navbarToggler = document.getElementById('navbarToggler');
-    const navbarCollapse = document.getElementById('navbarCollapse');
-    navbarToggler.addEventListener('click', () => {
-      navbarCollapse.classList.toggle('hidden');
-    });
-
-    // Handle form submission and show success message
-    const form = document.getElementById('request-form');
-    const successMessage = document.getElementById('success-message');
-
-    form.addEventListener('submit', (e) => {
-      e.preventDefault(); // Prevent actual form submission
-
-      // Validate form fields
-      const itemName = document.getElementById('item-name').value;
-      const description = document.getElementById('description').value;
-
-      if (itemName && description) {
-        successMessage.classList.remove('hidden');
-        form.reset(); // Reset form fields after submission
-      } else {
-        alert('Please fill in all fields!');
-      }
-    });
-  </script>
-</body>
-
-</html>
+{% endblock %}

@@ -95,7 +95,40 @@ def dashboard():
 
 @app.route('/browseItems')
 def browse_items():
-    return render_template('browseItems.html')
+    return render_template('browseItems.html', username=session["username"])
+
+@app.route('/swapRequests')
+def swap_requests():
+    return render_template('swapRequests.html')
+
+@app.route('/savedItems')
+def saved_items():
+    return render_template('savedItems.html')
+
+@app.route("/profile")
+def profile():
+    if "username" not in session:
+        return redirect(url_for("signin"))
+
+    return render_template(
+        "profile.html",
+        username=session["username"],
+        email=session.get("email", "Not provided")
+    )
+
+
+@app.route('/myListings')
+def my_listings():
+    return render_template('Listings.html', username=session["username"])
+
+@app.route('/notifications')
+def notifications():
+    return render_template('notifications.html')
+
+@app.route('/settings')
+def settings():
+    return render_template('settings.html')
+
 
 
 @app.route("/logout")
