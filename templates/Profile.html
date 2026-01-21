@@ -1,6 +1,6 @@
 {% extends "signedInBase.html" %}
 
-{% block title %}Profile | ShareSpace{% endblock %}
+{% block title %}Profile – ShareSpace{% endblock %}
 
 {% block nav_profile %}
 {{ ACTIVE }}
@@ -8,57 +8,159 @@
 
 {% block content %}
 
-<div class="max-w-4xl mx-auto space-y-8">
+<!-- Top Bar -->
+<div class="mb-8">
+    <h1 class="text-3xl font-bold text-dark dark:text-white mb-1">My Profile</h1>
+    <p class="text-body-color dark:text-dark-6">
+        Manage your account information and swap history
+    </p>
+</div>
 
-    <!-- Header -->
-    <div>
-        <h1 class="text-2xl font-bold">Profile</h1>
-        <p class="text-slate-400">Manage your personal information</p>
-    </div>
-
-    <!-- Profile Card -->
-    <div class="bg-dark-3 rounded-xl p-6 flex items-center gap-6">
-        <div class="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-purple-600
-                    flex items-center justify-center text-3xl font-bold">
-            {{ username[0]|upper }}
-        </div>
-
-        <div>
-            <h2 class="text-xl font-semibold">{{ username }}</h2>
-            <p class="text-slate-400 text-sm">Active member</p>
-        </div>
-    </div>
-
-    <!-- Profile Details -->
-    <div class="bg-dark-3 rounded-xl p-6">
-        <h3 class="text-lg font-semibold mb-4">Account Details</h3>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-                <label class="text-sm text-slate-400">Username</label>
-                <p class="mt-1">{{ username }}</p>
+<!-- Profile Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    
+    <!-- Left Column - Profile Card -->
+    <div class="lg:col-span-1">
+        <div class="bg-white dark:bg-dark-2 rounded-xl p-6 shadow-lg">
+            
+            <!-- Profile Picture -->
+            <div class="text-center mb-6">
+                <div class="w-32 h-32 rounded-full bg-gradient-to-br from-primary to-purple mx-auto flex items-center justify-center text-white text-4xl font-bold mb-4">
+                    {{ session.username[0].upper()}}
+                </div>
+                <h2 class="text-xl font-bold text-dark dark:text-white mb-1">
+                    {{ session.username }}
+                </h2>
+                <p class="text-sm text-body-color dark:text-dark-6">
+                    {{ session.email }}
+                </p>
+                <p class="text-xs text-body-color dark:text-dark-6 mt-1">
+                    <i class="fas fa-map-marker-alt mr-1"></i>{{ session.hostel or 'Campus' }}
+                </p>
             </div>
 
-            <div>
-                <label class="text-sm text-slate-400">Email</label>
-                <p class="mt-1">{{ email }}</p>
+            <!-- Quick Actions -->
+            <div class="space-y-2">
+                <a href="{{ url_for('my_listings') }}" 
+                   class="block w-full px-4 py-3 bg-primary text-white rounded-lg text-center font-semibold hover:bg-blue-dark transition">
+                    <i class="fas fa-plus mr-2"></i>Add New Item
+                </a>
+                <a href="{{ url_for('settings') }}" 
+                   class="block w-full px-4 py-3 bg-gray-1 dark:bg-dark text-dark dark:text-white rounded-lg text-center font-semibold hover:bg-gray-2 dark:hover:bg-dark-3 transition">
+                    <i class="fas fa-cog mr-2"></i>Edit Profile
+                </a>
             </div>
+
         </div>
     </div>
 
-    <!-- Actions -->
-    <div class="flex gap-4">
-        <a href="{{ url_for('settings') }}"
-           class="px-4 py-2 bg-primary rounded-lg hover:opacity-90 transition">
-            Edit Profile
-        </a>
+    <!-- Right Column - Tabs Content -->
+    <div class="lg:col-span-2">
+        
+        <!-- Tabs -->
+        <div class="bg-white dark:bg-dark-2 rounded-xl shadow-lg overflow-hidden">
+            
+            <!-- Tab Headers -->
+            <div class="flex border-b border-stroke dark:border-dark-3">
+                <button onclick="showTab('active-listings')" 
+                        id="tab-active-listings"
+                        class="flex-1 px-6 py-4 font-semibold text-primary border-b-2 border-primary transition">
+                    Active Listings
+                </button>
+                <button onclick="showTab('swap-history')" 
+                        id="tab-swap-history"
+                        class="flex-1 px-6 py-4 font-semibold text-body-color dark:text-dark-6 hover:text-primary transition">
+                    Swap History
+                </button>
+                <button onclick="showTab('saved-items')" 
+                        id="tab-saved-items"
+                        class="flex-1 px-6 py-4 font-semibold text-body-color dark:text-dark-6 hover:text-primary transition">
+                    Saved Items
+                </button>
+            </div>
 
-        <a href="{{ url_for('logout') }}"
-           class="px-4 py-2 bg-red-600 rounded-lg hover:opacity-90 transition">
-            Logout
-        </a>
+            <!-- Tab Content -->
+            <div class="p-6">
+                <div id="active-listings" class="tab-content">
+
+            {% if active_listings %}
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {% for item in active_listings %}
+                    <div class="border rounded-lg p-4">
+                        <h3 class="font-bold">{{ item.name }}</h3>
+                        <p class="text-sm text-body-color">{{ item.category|capitalize }}</p>
+                        <p class="text-xs mt-2 line-clamp-2">{{ item.description }}</p>
+
+                        <div class="flex gap-2 mt-3">
+                            <a href="/item/{{ item.id }}" class="text-primary text-sm">View</a>
+                            <a href="/delete-item/{{ item.id }}" class="text-red-500 text-sm">Delete</a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-center text-body-color">No active listings</p>
+            {% endif %}
+
+            </div>
+
+            <div id="swap-history" class="tab-content hidden">
+
+            {% if swap_history %}
+                <ul class="space-y-4">
+                    {% for swap in swap_history %}
+                    <li class="border rounded-lg p-4">
+                        <p class="font-semibold">{{ swap.name }}</p>
+                        <p class="text-xs text-body-color">
+                            Swapped on {{ swap.completed_at }}
+                        </p>
+                    </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-center text-body-color">No swaps yet</p>
+            {% endif %}
+
+            </div>
+
+            <div id="saved-items" class="tab-content hidden">
+
+{% if saved_items %}
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {% for item in saved_items %}
+        <div class="border rounded-lg p-4">
+            <h3 class="font-bold">{{ item.name }}</h3>
+            <p class="text-sm text-body-color">{{ item.category|capitalize }}</p>
+
+            <div class="mt-2">
+                <a href="/item/{{ item.id }}" class="text-primary text-sm">
+                    View Item
+                </a>
+            </div>
+        </div>
+        {% endfor %}
     </div>
+{% else %}
+    <p class="text-center text-body-color">No saved items</p>
+{% endif %}
 
 </div>
+
+
+
+                
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function showTab(tabId) {
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
+    document.getElementById(tabId).classList.remove('hidden');
+}
+</script>
+
 
 {% endblock %}

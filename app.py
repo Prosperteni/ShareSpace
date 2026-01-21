@@ -83,6 +83,9 @@ def signin():
             return render_template("signin.html", error="Invalid credentials")
 
         session["username"] = username
+        session["user_id"] = row["id"]
+        session["hostel"] = row["hostel"]
+
         return redirect("/dashboard")
 
     return render_template("signin.html")
@@ -105,16 +108,37 @@ def swap_requests():
 def saved_items():
     return render_template('savedItems.html')
 
+
 @app.route("/profile")
 def profile():
-    if "username" not in session:
+    if "user_id" not in session:
         return redirect(url_for("signin"))
+
+    user_id = session["user_id"]
+
+    db = get_db()
+
+     # Active listings
+    active_listings = db.execute("""
+        SELECT *
+        FROM items
+        WHERE owner_id = ?
+          AND is_active = 1
+        ORDER BY created_at DESC
+    """, (user_id,)).fetchall()
+
+    # TEMPORARY placeholders (tables not implemented yet)
+    swap_history = []
+    saved_items = []
 
     return render_template(
         "profile.html",
         username=session["username"],
-        email=session.get("email", "Not provided")
+        active_listings=active_listings,
+        swap_history=swap_history,
+        saved_items=saved_items
     )
+
 
 
 @app.route('/myListings')
@@ -123,7 +147,8 @@ def my_listings():
 
 @app.route('/notifications')
 def notifications():
-    return render_template('notifications.html')
+    return render_template('notifications.html', username=session["username"])
+
 
 @app.route('/settings')
 def settings():

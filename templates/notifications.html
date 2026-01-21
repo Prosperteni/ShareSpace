@@ -1,0 +1,31 @@
+{% extends "signedInBase.html" %}
+
+{% block title %}Notifications – ShareSpace{% endblock %}
+
+{% block nav_notifications %}
+{{ ACTIVE }}
+{% endblock %}
+
+{% block content %}
+
+<!-- Top Bar -->
+<div class="mb-8 flex items-center justify-between">
+    <div>
+        <h1 class="text-3xl font-bold text-dark dark:text-white mb-1">Notifications</h1>
+        <p class="text-body-color dark:text-dark-6">
+            Stay updated with your swap activity
+        </p>
+    </div>
+
+</div>
+<!-- Notifications List -->
+<div class="space-y-4">
+    <div class="bg-white dark:bg-dark-2 rounded-xl p-6 shadow-lg">
+        <p class="text-body-color dark:text-dark-6">
+            You have no new notifications.
+        </p>
+    </div>
+</div>
+
+
+{% endblock %}
