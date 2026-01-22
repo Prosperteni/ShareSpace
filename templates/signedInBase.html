@@ -48,11 +48,11 @@
             <span class="font-medium">Browse Items</span>
         </a>
 
-        <a href="{{ url_for('my_listings') }}"
+        <a href="{{ url_for('upload') }}"
            class="flex items-center gap-3 px-4 py-3 rounded-lg transition
-                  {% block nav_listings %}{{ INACTIVE }}{% endblock %}">
+                  {% block nav_upload %}{{ INACTIVE }}{% endblock %}">
             <i class="fas fa-box w-5 text-lg"></i>
-            <span class="font-medium">My Listings</span>
+            <span class="font-medium">Upload an Item</span>
         </a>
 
         <a href="{{ url_for('swap_requests') }}"
@@ -83,12 +83,6 @@
             <span class="font-medium">Profile</span>
         </a>
 
-        <a href="{{ url_for('settings') }}"
-           class="flex items-center gap-3 px-4 py-3 rounded-lg transition
-                  {% block nav_settings %}{{ INACTIVE }}{% endblock %}">
-            <i class="fas fa-cog w-5 text-lg"></i>
-            <span class="font-medium">Settings</span>
-        </a>
 
     </nav>
         <!-- User Profile -->

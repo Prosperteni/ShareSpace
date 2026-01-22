@@ -1,8 +1,8 @@
 {% extends "signedInBase.html" %}
 
-{% block title %}My Listings – ShareSpace{% endblock %}
+{% block title %}Upload – ShareSpace{% endblock %}
 
-{% block nav_listings %}
+{% block nav_upload %}
 {{ ACTIVE }}
 {% endblock %}
 
@@ -37,7 +37,7 @@
             {% endif %}
 
             <!-- Form -->
-            <form action="/add-item" method="POST" enctype="multipart/form-data" class="bg-white dark:bg-dark-2 rounded-xl p-8 shadow-lg">
+            <form action="/upload" method="POST" enctype="multipart/form-data" class="bg-white dark:bg-dark-2 rounded-xl p-8 shadow-lg">
                 
                 <!-- Item Name -->
                 <div class="mb-6">
@@ -158,13 +158,13 @@
 
                 <!-- Location/Hostel -->
                 <div class="mb-6">
-                    <label for="location" class="block text-sm font-semibold text-dark dark:text-white mb-2">
+                    <label for="Hostel" class="block text-sm font-semibold text-dark dark:text-white mb-2">
                         Your Location <span class="text-red">*</span>
                     </label>
                     <input 
                         type="text" 
-                        id="location" 
-                        name="location" 
+                        id="hostel" 
+                        name="hostel" 
                         required
                         placeholder="e.g., West Hall, Room 301"
                         value="{{ session.hostel if session.hostel else '' }}"
