@@ -3,11 +3,303 @@
 {% block title %}Dashboard – ShareSpace{% endblock %}
 
 {% block nav_dashboard %}
-text-white bg-primary bg-opacity-10 border-r-4 border-primary
+{{ ACTIVE }}
 {% endblock %}
 
+
 {% block content %}
-<h1 class="text-3xl font-bold text-slate-900">
-    Welcome back, {{ FullName }}! 👋
-</h1>
+
+<!-- Top Bar with Swap Focus -->
+<div class="mb-8">
+    <h1 class="text-3xl font-bold text-orange dark:text-purple mb-1">Welcome back, {{ session.username }}! 🔄</h1>
+    <p class="text-body-color dark:text-dark-6">
+        Ready to exchange? Here's your swap activity today
+    </p>
+</div>
+
+<!-- Quick Action Buttons -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+    <a href="{{ url_for('browse_items') }}" 
+       class="flex items-center gap-4 p-6 bg-gradient-to-r from-primary to-blue-dark text-white rounded-xl shadow-lg hover:shadow-xl transition transform hover:-translate-y-1">
+        <div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+            <i class="fas fa-search text-3xl"></i>
+        </div>
+        <div>
+            <h3 class="text-xl font-bold mb-1">Find Items to Trade</h3>
+            <p class="text-sm opacity-90">Browse what others want to swap</p>
+        </div>
+        <i class="fas fa-arrow-right ml-auto text-2xl"></i>
+    </a>
+    
+    <a href="{{ url_for('upload') }}" 
+       class="flex items-center gap-4 p-6 bg-gradient-to-r from-green to-secondary text-white rounded-xl shadow-lg hover:shadow-xl transition transform hover:-translate-y-1">
+        <div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+            <i class="fas fa-plus-circle text-3xl"></i>
+        </div>
+        <div>
+            <h3 class="text-xl font-bold mb-1">List Item for Swap</h3>
+            <p class="text-sm opacity-90">Offer something you don't need</p>
+        </div>
+        <i class="fas fa-arrow-right ml-auto text-2xl"></i>
+    </a>
+</div>
+
+<!-- Stats Cards - Swap Focused -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <!-- Active Swap Offers -->
+    <div class="bg-white dark:bg-dark-2 rounded-xl p-6 shadow-lg hover:shadow-xl transition transform hover:-translate-y-1">
+        <div class="flex items-center justify-between mb-4">
+            <div>
+                <div class="text-4xl font-bold text-dark dark:text-white mb-1">{{ stats.active_offers or 0 }}</div>
+                <div class="text-sm font-medium text-body-color dark:text-dark-6">Items for Swap</div>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-primary bg-opacity-10 flex items-center justify-center text-primary text-xl">
+                <i class="fas fa-exchange-alt"></i>
+            </div>
+        </div>
+        <div class="text-xs text-body-color dark:text-dark-6">
+            <i class="fas fa-info-circle mr-1"></i>Items you're offering to trade
+        </div>
+    </div>
+
+    <!-- Pending Swap Requests -->
+    <div class="bg-white dark:bg-dark-2 rounded-xl p-6 shadow-lg hover:shadow-xl transition transform hover:-translate-y-1">
+        <div class="flex items-center justify-between mb-4">
+            <div>
+                <div class="text-4xl font-bold text-dark dark:text-white mb-1">{{ stats.pending_requests or 0 }}</div>
+                <div class="text-sm font-medium text-body-color dark:text-dark-6">Swap Requests</div>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-orange bg-opacity-10 flex items-center justify-center text-orange text-xl">
+                <i class="fas fa-handshake"></i>
+            </div>
+        </div>
+        <div class="text-xs text-body-color dark:text-dark-6">
+            <i class="fas fa-clock mr-1"></i>Awaiting your response
+        </div>
+    </div>
+
+    <!-- Completed Swaps -->
+    <div class="bg-white dark:bg-dark-2 rounded-xl p-6 shadow-lg hover:shadow-xl transition transform hover:-translate-y-1">
+        <div class="flex items-center justify-between mb-4">
+            <div>
+                <div class="text-4xl font-bold text-dark dark:text-white mb-1">{{ stats.completed_swaps or 0 }}</div>
+                <div class="text-sm font-medium text-body-color dark:text-dark-6">Swaps Done</div>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-green bg-opacity-10 flex items-center justify-center text-green text-xl">
+                <i class="fas fa-check-double"></i>
+            </div>
+        </div>
+        <div class="text-xs text-body-color dark:text-dark-6">
+            <i class="fas fa-trophy mr-1"></i>Successful exchanges
+        </div>
+    </div>
+
+    <!-- Potential Matches -->
+    <div class="bg-white dark:bg-dark-2 rounded-xl p-6 shadow-lg hover:shadow-xl transition transform hover:-translate-y-1">
+        <div class="flex items-center justify-between mb-4">
+            <div>
+                <div class="text-4xl font-bold text-dark dark:text-white mb-1">{{ stats.matches or 0 }}</div>
+                <div class="text-sm font-medium text-body-color dark:text-dark-6">New Matches</div>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-purple bg-opacity-10 flex items-center justify-center text-purple text-xl">
+                <i class="fas fa-fire"></i>
+            </div>
+        </div>
+        <div class="text-xs text-body-color dark:text-dark-6">
+            <i class="fas fa-users mr-1"></i>People want what you have
+        </div>
+    </div>
+</div>
+
+<!-- Main Content Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+    
+    <!-- Pending Swap Requests -->
+    <div class="lg:col-span-2 bg-white dark:bg-dark-2 rounded-xl p-6 shadow-lg">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-xl font-bold text-dark dark:text-white flex items-center gap-2">
+                <i class="fas fa-handshake text-primary"></i>
+                Incoming Swap Requests
+            </h2>
+            <a href="/swap-requests" class="text-sm font-semibold text-primary hover:underline">View All</a>
+        </div>
+        
+        {% if swap_requests %}
+        <div class="space-y-4">
+            {% for request in swap_requests[:3] %}
+            <div class="flex gap-4 p-4 bg-gray-1 dark:bg-dark rounded-lg border-l-4 border-orange">
+                
+                <!-- Requester Avatar -->
+                <div class="w-12 h-12 rounded-full bg-gradient-to-br from-orange to-red-500 flex items-center justify-center text-white font-bold flex-shrink-0">
+                    {{ request.requester_name[0].upper() }}
+                </div>
+
+                <!-- Request Info -->
+                <div class="flex-1 min-w-0">
+                    <h3 class="font-semibold text-dark dark:text-white mb-1">
+                        {{ request.requester_name }} wants to swap
+                    </h3>
+                    <div class="text-sm text-body-color dark:text-dark-6 mb-2">
+                        <span class="font-medium">Their:</span> {{ request.their_item }} 
+                        <i class="fas fa-arrow-right mx-2 text-primary"></i>
+                        <span class="font-medium">Your:</span> {{ request.your_item }}
+                    </div>
+                    <p class="text-xs text-body-color dark:text-dark-6">
+                        <i class="fas fa-clock mr-1"></i>{{ request.time_ago }}
+                    </p>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-col gap-2">
+                    <button onclick="respondSwap({{ request.id }}, 'accept')" 
+                            class="px-4 py-2 bg-green text-white text-sm rounded-lg hover:bg-opacity-80 transition whitespace-nowrap">
+                        <i class="fas fa-check mr-1"></i>Accept
+                    </button>
+                    <button onclick="respondSwap({{ request.id }}, 'reject')" 
+                            class="px-4 py-2 bg-red text-white text-sm rounded-lg hover:bg-opacity-80 transition whitespace-nowrap">
+                        <i class="fas fa-times mr-1"></i>Decline
+                    </button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center py-12">
+            <i class="fas fa-inbox text-5xl text-body-color dark:text-dark-6 opacity-50 mb-4"></i>
+            <h3 class="text-lg font-bold text-dark dark:text-white mb-2">No Pending Requests</h3>
+            <p class="text-body-color dark:text-dark-6">
+                When someone wants to swap with you, it'll appear here
+            </p>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Quick Stats & Activity -->
+    <div class="bg-white dark:bg-dark-2 rounded-xl p-6 shadow-lg">
+        <h2 class="text-xl font-bold text-dark dark:text-white mb-6 flex items-center gap-2">
+            <i class="fas fa-chart-line text-primary"></i>
+            Your Swap Stats
+        </h2>
+        
+        <!-- Swap Success Rate -->
+        <div class="mb-6 p-4 bg-gray-1 dark:bg-dark rounded-lg">
+            <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-semibold text-dark dark:text-white">Success Rate</span>
+                <span class="text-lg font-bold text-green">{{ stats.success_rate or 0 }}%</span>
+            </div>
+            <div class="w-full bg-gray-2 dark:bg-dark-3 rounded-full h-2">
+                <div class="bg-green h-2 rounded-full" style="width: {{ stats.success_rate or 0 }}%"></div>
+            </div>
+            <p class="text-xs text-body-color dark:text-dark-6 mt-2">
+                Based on {{ stats.total_attempts or 0 }} swap attempts
+            </p>
+        </div>
+
+        <!-- Recent Activity -->
+        <h3 class="text-sm font-bold text-dark dark:text-white mb-3">Recent Activity</h3>
+        <div class="space-y-3">
+            {% if recent_activity %}
+                {% for activity in recent_activity[:4] %}
+                <div class="flex gap-3 items-start">
+                    <div class="w-8 h-8 rounded-full {{ 'bg-green' if activity.type == 'completed' else 'bg-primary' }} bg-opacity-10 flex items-center justify-center flex-shrink-0">
+                        <i class="fas {{ 'fa-check' if activity.type == 'completed' else 'fa-exchange-alt' }} text-{{ 'green' if activity.type == 'completed' else 'primary' }} text-sm"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm text-dark dark:text-white line-clamp-2">{{ activity.message }}</p>
+                        <p class="text-xs text-body-color dark:text-dark-6">{{ activity.time_ago }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+            <p class="text-sm text-body-color dark:text-dark-6 text-center py-4">
+                No recent activity
+            </p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Recommended Swap Matches -->
+<div class="bg-white dark:bg-dark-2 rounded-xl p-6 shadow-lg">
+    <div class="flex items-center justify-between mb-6">
+        <div>
+            <h2 class="text-xl font-bold text-dark dark:text-white flex items-center gap-2">
+                <i class="fas fa-star text-primary"></i>
+                Perfect Matches for You
+            </h2>
+            <p class="text-sm text-body-color dark:text-dark-6 mt-1">
+                People looking for items you have, and offering what you want
+            </p>
+        </div>
+        <a href="{{ url_for('browse_items') }}" class="text-sm font-semibold text-primary hover:underline">View All</a>
+    </div>
+    
+    {% if matches %}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {% for match in matches %}
+        <div class="p-4 bg-gray-1 dark:bg-dark rounded-lg border-2 border-primary border-opacity-20 hover:border-opacity-50 transition">
+            
+            <!-- Match Badge -->
+            <div class="flex items-center gap-2 mb-3">
+                <span class="px-3 py-1 bg-primary bg-opacity-10 text-primary text-xs font-bold rounded-full">
+                    <i class="fas fa-fire mr-1"></i>{{ match.match_score }}% Match
+                </span>
+            </div>
+
+            <!-- Match Info -->
+            <div class="mb-3">
+                <h3 class="font-semibold text-dark dark:text-white mb-1">{{ match.their_item }}</h3>
+                <p class="text-xs text-body-color dark:text-dark-6 mb-2">
+                    <i class="fas fa-user mr-1"></i>{{ match.username }} • {{ match.hostel }}
+                </p>
+                <div class="flex items-center gap-2 text-xs">
+                    <span class="px-2 py-1 bg-green bg-opacity-10 text-green rounded">
+                        Wants: {{ match.looking_for }}
+                    </span>
+                </div>
+            </div>
+
+            <!-- Action -->
+            <a href="/item/{{ match.item_id }}" 
+               class="block w-full px-4 py-2 bg-primary text-white text-sm font-semibold rounded-lg text-center hover:bg-blue-dark transition">
+                <i class="fas fa-handshake mr-2"></i>Propose Swap
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-12">
+        <i class="fas fa-search text-5xl text-body-color dark:text-dark-6 opacity-50 mb-4"></i>
+        <h3 class="text-lg font-bold text-dark dark:text-white mb-2">No Perfect Matches Yet</h3>
+        <p class="text-body-color dark:text-dark-6 mb-6">
+            Add items you're looking for to help us find matches
+        </p>
+        <a href="{{ url_for('upload') }}" 
+           class="inline-block px-6 py-3 bg-primary text-white rounded-lg font-semibold hover:bg-blue-dark transition">
+            <i class="fas fa-plus mr-2"></i>List What You Want
+        </a>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+function respondSwap(requestId, action) {
+    fetch(`/respond-swap/${requestId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ action: action })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            location.reload();
+        } else {
+            alert('Failed to respond to swap request');
+        }
+    });
+}
+</script>
+
 {% endblock %}

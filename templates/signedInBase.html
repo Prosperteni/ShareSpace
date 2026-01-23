@@ -7,15 +7,16 @@
     <title>{% block title %}ShareSpace{% endblock %}</title>
 
     <!-- Tailwind -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/tailwind.css') }}">
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/tailwind.css') }}">
+
 
     <!-- Icons -->
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
-<body class="bg-gray-1 dark:bg-dark">
+<body class="bg-orange text-gray-900 dark:bg-dark dark:text-gray-100">
 
 {% set ACTIVE = "text-white bg-primary bg-opacity-10 border-r-4 border-primary" %}
 {% set INACTIVE = "text-gray-7 hover:text-white hover:bg-dark-3" %}
@@ -60,13 +61,6 @@
                   {% block nav_requests %}{{ INACTIVE }}{% endblock %}">
             <i class="fas fa-handshake w-5 text-lg"></i>
             <span class="font-medium">Swap Requests</span>
-        </a>
-
-        <a href="{{ url_for('saved_items') }}"
-           class="flex items-center gap-3 px-4 py-3 rounded-lg transition
-                  {% block nav_saved %}{{ INACTIVE }}{% endblock %}">
-            <i class="fas fa-heart w-5 text-lg"></i>
-            <span class="font-medium">Saved Items</span>
         </a>
 
         <a href="{{ url_for('notifications') }}"
@@ -115,9 +109,10 @@
     </aside>
 
     <!-- Main Content -->
-    <main class="ml-64 min-h-screen p-8">
+    <main class="ml-64 p-8 min-h-screen bg-red dark:bg-green">
         {% block content %}{% endblock %}
     </main>
+
 
 </body>
 </html>

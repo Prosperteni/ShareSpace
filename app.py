@@ -107,19 +107,46 @@ def signin():
 
     return render_template("signin.html")
 
-@app.route("/dashboard")
+@app.route('/dashboard')
 def dashboard():
-    if "username" not in session:
-        return redirect(url_for("signin"))
-    return render_template("dashboard.html", username=session["username"])
+    if 'user_id' not in session:
+        return redirect(url_for('signin'))
+
+    db = get_db()
+    user_id = session['user_id']
+
+    # Compute stats from existing tables
+    active_offers = db.execute(
+        "SELECT COUNT(*) FROM items WHERE owner_id = ? AND is_active = 1",
+        (user_id,)
+    ).fetchone()[0]
+
+    total_views = db.execute(
+        "SELECT COALESCE(SUM(views), 0) FROM items WHERE owner_id = ?",
+        (user_id,)
+    ).fetchone()[0]
+
+    stats = {
+        "active_offers": active_offers,
+        "pending_requests": 11,     # placeholder
+        "completed_swaps": 11,      # placeholder
+        "matches": 0,              # placeholder
+        "success_rate": 0,
+        "total_attempts": 0
+    }
+
+    return render_template(
+        "dashboard.html",
+        username=session["username"],
+        stats=stats,
+        swap_requests=[],
+        recent_activity=[],
+        matches=[]
+    )
 
 @app.route('/swapRequests')
 def swap_requests():
     return render_template('swapRequests.html')
-
-@app.route('/savedItems')
-def saved_items():
-    return render_template('savedItems.html')
 
 
 @app.route("/profile")
