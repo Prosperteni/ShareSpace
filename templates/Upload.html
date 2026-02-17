@@ -8,7 +8,7 @@
 {% block content %}
 
     <!-- Main Content -->
-    <main class="ml-[260px] min-h-screen p-8">
+    <!-- <main class="ml-[260px] min-h-screen p-8"> -->
         <!-- Top Bar -->
         <div class="mb-8">
             <div class="flex items-center gap-3 mb-4">
@@ -21,7 +21,7 @@
         </div>
 
         <!-- Form Container -->
-        <div class="max-w-3xl">
+        <div class="w-full">
             <!-- Error/Success Messages -->
             {% if error %}
             <div class="bg-red bg-opacity-10 border border-red text-red px-6 py-4 rounded-lg mb-6">
@@ -36,8 +36,11 @@
             {% endif %}
 
             <!-- Form -->
-            <form action="/upload" method="POST" enctype="multipart/form-data" class="bg-white dark:bg-dark-2 rounded-xl p-8 shadow-lg">
-                
+            <form action="/upload" method="POST" enctype="multipart/form-data"
+                class="w-full bg-white dark:bg-dark-2 rounded-xl
+                        p-4 sm:p-6 md:p-8 lg:p-10
+                        shadow-lg">
+                        
                 <!-- Item Name -->
                 <div class="mb-6">
                     <label for="name" class="block text-sm font-semibold text-dark dark:text-white mb-2">
@@ -204,7 +207,7 @@
                 </div>
 
                 <!-- Form Actions -->
-                <div class="flex gap-4">
+                <div class="flex flex-col sm:flex-row gap-4 mt-8">
                     <button 
                         type="submit" 
                         class="flex-1 px-6 py-4 bg-primary text-white rounded-lg font-semibold hover:bg-blue-dark transition shadow-lg">
@@ -218,7 +221,7 @@
                 </div>
             </form>
         </div>
-    </main>
+    <!-- </main> -->
 
     <script>
         function previewImage(input) {
