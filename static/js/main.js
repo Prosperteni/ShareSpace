@@ -69,6 +69,18 @@
           navbarCollapse.classList.add("hidden");
         })
       );
+  
+    // 🔥 Close when clicking outside
+    document.addEventListener("click", (event) => {
+      const isClickInside =
+        navbarCollapse.contains(event.target) ||
+        navbarToggler.contains(event.target);
+
+      if (!isClickInside) {
+        navbarToggler.classList.remove("navbarTogglerActive");
+        navbarCollapse.classList.add("hidden");
+      }
+    });
   }
 
   // ===== Sub-menu
