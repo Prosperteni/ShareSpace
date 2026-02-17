@@ -21,11 +21,15 @@
 {% set ACTIVE = "text-white bg-primary bg-opacity-10 border-r-4 border-primary" %}
 {% set INACTIVE = "text-gray-7 hover:text-white hover:bg-dark-3" %}
 
+
 <!-- Sidebar -->
 <aside id="sidebar"
        class="fixed inset-y-0 left-0 z-50 w-64 transform -translate-x-full
               md:translate-x-0 transition-transform duration-300
               bg-dark border-r border-dark-3 flex flex-col">
+
+     
+         
 
 
     <!-- Logo -->
@@ -110,6 +114,13 @@
 </div>
 
     </aside>
+
+    <!-- Overlay (mobile only) -->
+    <div id="overlay"
+     class="fixed inset-0 bg-black bg-opacity-50 hidden z-40 md:hidden"
+     onclick="closeSidebar()">
+    </div>
+    
     <!-- Mobile Topbar -->
     <div class="md:hidden flex items-center justify-between bg-dark p-4 text-white">
         <button onclick="toggleSidebar()" class="text-xl">
@@ -124,10 +135,20 @@
     </main>
 
     <script>
-    function toggleSidebar() {
-        const sidebar = document.getElementById('sidebar');
-        sidebar.classList.toggle('-translate-x-full');
-    }
+    
+       const sidebar = document.getElementById('sidebar');
+       const overlay = document.getElementById('overlay');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('hidden');
+        }
+
+        function closeSidebar() {
+            sidebar.classList.add('-translate-x-full');
+            overlay.classList.add('hidden');
+        }
+
     </script>
 
 
