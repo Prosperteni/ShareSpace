@@ -22,8 +22,11 @@
 {% set INACTIVE = "text-gray-7 hover:text-white hover:bg-dark-3" %}
 
 <!-- Sidebar -->
-<aside class="fixed left-0 top-0 z-50 h-screen w-64 bg-dark border-r border-dark-3
-              overflow-y-auto flex flex-col">
+<aside id="sidebar"
+       class="fixed inset-y-0 left-0 z-50 w-64 transform -translate-x-full
+              md:translate-x-0 transition-transform duration-300
+              bg-dark border-r border-dark-3 flex flex-col">
+
 
     <!-- Logo -->
     <div class="px-6 py-8 border-b border-dark-3">
@@ -107,11 +110,25 @@
 </div>
 
     </aside>
+    <!-- Mobile Topbar -->
+    <div class="md:hidden flex items-center justify-between bg-dark p-4 text-white">
+        <button onclick="toggleSidebar()" class="text-xl">
+            <i class="fas fa-bars"></i>
+        </button>
+        <h2 class="font-bold">ShareSpace</h2>
+    </div>
 
     <!-- Main Content -->
-    <main class="ml-64 p-8 min-h-screen bg-red dark:bg-green">
+    <main class="p-6 md:ml-64 min-h-screen transition-all duration-300">
         {% block content %}{% endblock %}
     </main>
+
+    <script>
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        sidebar.classList.toggle('-translate-x-full');
+    }
+    </script>
 
 
 </body>
