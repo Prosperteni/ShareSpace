@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session, g, url_for, current_app, session, jsonify
+from flask import Flask, render_template, request, redirect, session, g, url_for, current_app, session, jsonify, flash
 from werkzeug.utils import secure_filename
 from flask_session import Session
 from datetime import datetime, timezone
@@ -303,7 +303,9 @@ def request_swap(item_id):
     """, (item_id, user_id)).fetchone()
 
     if existing:
-        return "Request already sent", 400
+        flash("Request already sent.", "warning")
+        return redirect(url_for("item_detail", item_id=item_id))
+
 
     # Insert swap request
     db.execute("""
@@ -313,7 +315,11 @@ def request_swap(item_id):
 
     db.commit()
 
-    return redirect(url_for("browse_items"))
+    
+    flash("Swap request sent successfully.", "success")
+    return redirect(url_for("browse_items", item_id=item_id))
+
+
 
 
 
@@ -322,7 +328,7 @@ def request_swap(item_id):
 def profile():
     if "user_id" not in session:
         return redirect(url_for("signin"))
-    
+
     db = get_db()
     user_id = session["user_id"]
 
