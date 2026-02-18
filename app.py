@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, session, g, url_for, current_app, session, jsonify
 from werkzeug.utils import secure_filename
 from flask_session import Session
-from datetime import datetime
+from datetime import datetime, timezone
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
 import waitress
@@ -42,6 +42,27 @@ def get_db():
         g.db.row_factory = sqlite3.Row
         g.db.execute("PRAGMA foreign_keys = ON")
     return g.db
+
+def time_ago(dt):
+    if isinstance(dt, str):
+        dt = datetime.strptime(dt, "%Y-%m-%d %H:%M:%S")
+
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=timezone.utc)
+
+    now = datetime.now(timezone.utc)
+    diff = now - dt
+
+    seconds = diff.total_seconds()
+
+    if seconds < 60:
+        return "just now"
+    elif seconds < 3600:
+        return f"{int(seconds // 60)} minutes ago"
+    elif seconds < 86400:
+        return f"{int(seconds // 3600)} hours ago"
+    else:
+        return f"{int(seconds // 86400)} days ago"
 
 
 @app.teardown_appcontext
@@ -148,7 +169,153 @@ def dashboard():
 
 @app.route('/swapRequests')
 def swap_requests():
-    return render_template('swapRequests.html', username=session["username"])
+    if 'user_id' not in session:
+        return redirect(url_for('signin'))
+
+    db = get_db()
+    user_id = session['user_id']
+
+    # Incoming
+    incoming = db.execute("""
+        SELECT 
+            sr.id,
+            sr.message,
+            sr.status,
+            sr.created_at,
+            i.name AS item_name,
+            i.image AS item_image,
+            u.username AS requester_name,
+            u.email AS requester_email,
+            u.phone AS requester_phone
+        FROM swap_requests sr
+        JOIN items i ON sr.item_id = i.id
+        JOIN users u ON sr.requester_id = u.id
+        WHERE sr.owner_id = :user_id
+        ORDER BY sr.created_at DESC
+    """, {"user_id": user_id}).fetchall()
+
+    # Outgoing
+    outgoing = db.execute("""
+        SELECT 
+            sr.id,
+            sr.message,
+            sr.status,
+            sr.created_at,
+            i.name AS item_name,
+            i.image AS item_image,
+            u.username AS owner_name,
+            u.email AS owner_email,
+            u.phone AS owner_phone
+        FROM swap_requests sr
+        JOIN items i ON sr.item_id = i.id
+        JOIN users u ON sr.owner_id = u.id
+        WHERE sr.requester_id = :user_id
+        ORDER BY sr.created_at DESC
+    """, {"user_id": user_id}).fetchall()
+
+    # Add time_ago to each request
+    incoming_requests = []
+    for r in incoming:
+        r = dict(r)
+        r['time_ago'] = time_ago(r['created_at'])
+        incoming_requests.append(r)
+
+    outgoing_requests = []
+    for r in outgoing:
+        r = dict(r)
+        r['time_ago'] = time_ago(r['created_at'])
+        outgoing_requests.append(r)
+
+    incoming_count = sum(1 for r in incoming_requests if r['status'] == 'pending')
+
+    return render_template(
+        'swapRequests.html',
+        username=session["username"],
+        incoming_requests=incoming_requests,
+        outgoing_requests=outgoing_requests,
+        incoming_count=incoming_count,
+        success=request.args.get('success'),
+        error=request.args.get('error')
+    )
+
+@app.route('/swap/respond/<int:request_id>', methods=['POST'])
+def respond_to_swap(request_id):
+    if 'user_id' not in session:
+        return {"success": False}, 403
+
+    db = get_db()
+    user_id = session['user_id']
+    data = request.get_json()
+    action = data.get("action")
+
+    if action not in ["accepted", "rejected"]:
+        return {"success": False}, 400
+
+    # Verify ownership
+    swap = db.execute("""
+        SELECT id FROM swap_requests
+        WHERE id = ? AND owner_id = ?
+    """, (request_id, user_id)).fetchone()
+
+    if not swap:
+        return {"success": False}, 403
+
+    db.execute("""
+        UPDATE swap_requests
+        SET status = ?, responded_at = CURRENT_TIMESTAMP
+        WHERE id = ?
+    """, (action, request_id))
+
+    db.commit()
+
+    return {"success": True}
+
+@app.route("/swap/request/<int:item_id>", methods=["POST"])
+def request_swap(item_id):
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    user_id = session["user_id"]
+    db = get_db()
+
+    # Get item info
+    item = db.execute("""
+        SELECT id, owner_id, is_active
+        FROM items
+        WHERE id = ?
+    """, (item_id,)).fetchone()
+
+    if not item:
+        return "Item not found", 404
+
+    # Prevent requesting your own item
+    if item["owner_id"] == user_id:
+        return "You cannot request your own item", 403
+
+    # Prevent requesting unavailable item
+    if item["is_active"] != 1:
+        return "Item not available", 400
+
+    # Prevent duplicate pending requests
+    existing = db.execute("""
+        SELECT id FROM swap_requests
+        WHERE item_id = ? AND requester_id = ? AND status = 'pending'
+    """, (item_id, user_id)).fetchone()
+
+    if existing:
+        return "Request already sent", 400
+
+    # Insert swap request
+    db.execute("""
+        INSERT INTO swap_requests (item_id, requester_id, owner_id, status)
+        VALUES (?, ?, ?, 'pending')
+    """, (item_id, user_id, item["owner_id"]))
+
+    db.commit()
+
+    return redirect(url_for("browse"))
+
+
 
 
 @app.route("/profile")

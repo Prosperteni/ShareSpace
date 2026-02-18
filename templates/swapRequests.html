@@ -133,11 +133,11 @@
                         <!-- Actions (if pending) -->
                         {% if request.status == 'pending' %}
                         <div class="flex gap-3">
-                            <button onclick="respondToSwap({{ request.id }}, 'accepted')" 
+                            <button onclick="respondToSwap('{{ request.id }}', 'accepted')" 
                                     class="flex-1 px-6 py-3 bg-green text-white rounded-lg font-semibold hover:bg-opacity-80 transition">
                                 <i class="fas fa-check mr-2"></i>Accept Swap
                             </button>
-                            <button onclick="respondToSwap({{ request.id }}, 'rejected')" 
+                            <button onclick="respondToSwap('{{ request.id }}', 'rejected')" 
                                     class="flex-1 px-6 py-3 bg-red text-white rounded-lg font-semibold hover:bg-opacity-80 transition">
                                 <i class="fas fa-times mr-2"></i>Decline
                             </button>

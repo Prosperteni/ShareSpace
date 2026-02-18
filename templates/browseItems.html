@@ -98,16 +98,29 @@
                 </span>
             </div>
 
-            <div class="flex gap-2 mt-4">
-                <a href="/item/{{ item.id }}"
-                   class="flex-1 bg-primary text-white py-2 rounded-lg text-center font-semibold hover:bg-blue-dark transition">
-                    View Details
-                </a>
-                <button onclick="saveItem({{ item.id }})" 
-                        class="px-4 py-2 bg-gray-1 dark:bg-dark rounded-lg hover:bg-gray-2 dark:hover:bg-dark-3 transition">
-                    <i class="fas fa-heart"></i>
-                </button>
-            </div>
+           <div class="flex gap-2 mt-4 flex-wrap">
+
+    <a href="/item/{{ item.id }}"
+       class="flex-1 bg-primary text-white py-2 rounded-lg text-center font-semibold hover:bg-blue-dark transition">
+        View Details
+    </a>
+
+    {% if session.get('user_id') and item.owner_id != session.get('user_id') and item.is_active == 1 %}
+    <form action="{{ url_for('request_swap', item_id=item.id) }}" method="POST" class="flex-1">
+        <button type="submit"
+                class="w-full bg-green-600 text-white py-2 rounded-lg font-semibold hover:bg-green-700 transition">
+            Request Swap
+        </button>
+    </form>
+    {% endif %}
+
+    <button onclick="saveItem('{{ item.id }}')" 
+            class="px-4 py-2 bg-gray-1 dark:bg-dark rounded-lg hover:bg-gray-2 dark:hover:bg-dark-3 transition">
+        <i class="fas fa-heart"></i>
+    </button>
+
+</div>
+
         </div>
     </div>
     {% endfor %}
@@ -128,6 +141,7 @@
         </a>
     </div>
 {% endif %}
+
 
 </div>
 
