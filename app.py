@@ -337,7 +337,20 @@ def profile():
 
     # TEMPORARY placeholders (tables not implemented yet)
     swap_history = []
-    saved_items = []
+    saved_items = db.execute("""
+    SELECT 
+        items.id,
+        items.name,
+        items.category,
+        items.image,
+        users.username AS owner_name
+    FROM saved_items
+    JOIN items ON saved_items.item_id = items.id
+    JOIN users ON items.owner_id = users.id
+    WHERE saved_items.user_id = ?
+      AND items.is_active = 1
+    """, (session['user_id'],)).fetchall()
+
 
     return render_template(
         "profile.html",
@@ -647,19 +660,59 @@ def upload():
 def save_item(item_id):
     if 'user_id' not in session:
         return jsonify({'success': False, 'error': 'Not logged in'}), 401
-    
-    db = get_db()
-    try:
-        db.execute('''
-            INSERT INTO saved_items (user_id, item_id) 
-            VALUES (?, ?)
-        ''', (session['user_id'], item_id))
-        db.commit()
-        return jsonify({'success': True})
-    except:
-        return jsonify({'success': False, 'error': 'Already saved'})
 
-# Add this JavaScript to browseItems.html
+    user_id = session['user_id']
+    db = get_db()
+
+    # 1️⃣ Check item exists and is active
+    item = db.execute("""
+        SELECT id, owner_id, is_active
+        FROM items
+        WHERE id = ?
+    """, (item_id,)).fetchone()
+
+    if not item:
+        return jsonify({'success': False, 'error': 'Item not found'}), 404
+
+    if item['is_active'] != 1:
+        return jsonify({'success': False, 'error': 'Item not available'}), 400
+
+    # 2️⃣ Prevent saving your own item
+    if item['owner_id'] == user_id:
+        return jsonify({'success': False, 'error': 'Cannot save your own item'}), 400
+
+    # 3️⃣ Prevent duplicates
+    existing = db.execute("""
+        SELECT 1 FROM saved_items
+        WHERE user_id = ? AND item_id = ?
+    """, (user_id, item_id)).fetchone()
+
+    if existing:
+        return jsonify({'success': False, 'error': 'Already saved'}), 400
+
+    # 4️⃣ Insert
+    db.execute("""
+        INSERT INTO saved_items (user_id, item_id)
+        VALUES (?, ?)
+    """, (user_id, item_id))
+    db.commit()
+
+    return jsonify({'success': True})
+
+@app.route('/unsave-item/<int:item_id>', methods=['POST'])
+def unsave_item(item_id):
+    if 'user_id' not in session:
+        return jsonify({'success': False}), 401
+
+    db = get_db()
+    db.execute("""
+        DELETE FROM saved_items
+        WHERE user_id = ? AND item_id = ?
+    """, (session['user_id'], item_id))
+    db.commit()
+
+    return jsonify({'success': True})
+
 
 @app.route('/notifications')
 def notifications():

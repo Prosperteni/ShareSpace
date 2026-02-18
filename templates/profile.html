@@ -425,15 +425,18 @@ function deleteItem(itemId) {
 
 function unsaveItem(itemId) {
     fetch(`/unsave-item/${itemId}`, {
-        method: 'POST',
+        method: 'POST'
     })
-    .then(response => response.json())
+    .then(res => res.json())
     .then(data => {
         if (data.success) {
             location.reload();
+        } else {
+            alert("Failed to unsave item");
         }
     });
 }
+
 
 function confirmDeleteAccount() {
     if (confirm('⚠️ WARNING: This action cannot be undone!\n\nAre you absolutely sure you want to delete your account?\n\nAll your listings, swap history, and personal data will be permanently deleted.')) {

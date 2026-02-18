@@ -155,17 +155,14 @@
 <script>
 function saveItem(itemId) {
     fetch(`/save-item/${itemId}`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        }
+        method: 'POST'
     })
-    .then(response => response.json())
+    .then(res => res.json())
     .then(data => {
         if (data.success) {
-            alert('Item saved!');
+            alert("Item saved!");
         } else {
-            alert('Failed to save item');
+            alert(data.error);
         }
     });
 }
