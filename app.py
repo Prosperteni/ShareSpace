@@ -313,7 +313,7 @@ def request_swap(item_id):
 
     db.commit()
 
-    return redirect(url_for("browse"))
+    return redirect(url_for("browse_items"))
 
 
 
@@ -322,10 +322,9 @@ def request_swap(item_id):
 def profile():
     if "user_id" not in session:
         return redirect(url_for("signin"))
-
-    user_id = session["user_id"]
-
+    
     db = get_db()
+    user_id = session["user_id"]
 
      # Active listings
     active_listings = db.execute("""
@@ -532,6 +531,34 @@ def browse_items():
     return render_template('browseItems.html', 
                          items=items, 
                          username=session.get("username"))
+
+@app.route('/item/<int:item_id>')
+def item_detail(item_id):
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
+    db = get_db()
+    item = db.execute("""
+        SELECT 
+            i.id,
+            i.name,
+            i.description,
+            i.category,
+            i.condition,
+            i.image,
+            i.created_at,
+            u.username AS owner_name,
+            u.phone AS owner_phone,
+            u.hostel AS owner_hostel
+        FROM items i
+        JOIN users u ON i.owner_id = u.id
+        WHERE i.id = :item_id
+    """, (item_id,)).fetchone()
+
+    if not item:
+        return redirect(url_for('browse_items'))
+
+    return render_template('items_detail.html', item=item, username=session.get("username"))
 
 # Upload/Add Item Route
 @app.route('/upload', methods=['GET', 'POST'])
