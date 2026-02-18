@@ -40,7 +40,9 @@ def get_db():
         print("📁 Connecting to database:", os.path.abspath(DB_PATH))  # <-- debug print
         g.db = sqlite3.connect(DB_PATH)
         g.db.row_factory = sqlite3.Row
+        g.db.execute("PRAGMA foreign_keys = ON")
     return g.db
+
 
 @app.teardown_appcontext
 def close_db(e=None):
@@ -146,7 +148,7 @@ def dashboard():
 
 @app.route('/swapRequests')
 def swap_requests():
-    return render_template('swapRequests.html')
+    return render_template('swapRequests.html', username=session["username"])
 
 
 @app.route("/profile")

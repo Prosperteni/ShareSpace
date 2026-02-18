@@ -1,0 +1,312 @@
+{% extends "signedInBase.html" %}
+
+{% block title %}Swap Requests – ShareSpace{% endblock %}
+
+{% block nav_requests %}
+{{ ACTIVE }}
+{% endblock %}
+
+{% block content %}
+
+<!-- Top Bar -->
+<div class="mb-8">
+    <h1 class="text-3xl font-bold text-dark dark:text-white mb-1">
+        <i class="fas fa-handshake text-primary mr-2"></i>Swap Requests
+    </h1>
+    <p class="text-body-color dark:text-dark-6">
+        Manage incoming and outgoing swap requests
+    </p>
+</div>
+
+<!-- Success/Error Messages -->
+{% if success %}
+<div class="bg-green bg-opacity-10 border border-green text-green px-6 py-4 rounded-lg mb-6">
+    <i class="fas fa-check-circle mr-2"></i>{{ success }}
+</div>
+{% endif %}
+
+{% if error %}
+<div class="bg-red bg-opacity-10 border border-red text-red px-6 py-4 rounded-lg mb-6">
+    <i class="fas fa-exclamation-circle mr-2"></i>{{ error }}
+</div>
+{% endif %}
+
+<!-- Tabs -->
+<div class="bg-white dark:bg-dark-2 rounded-xl shadow-lg overflow-hidden mb-6">
+    <div class="flex border-b border-stroke dark:border-dark-3">
+        <button onclick="showTab('incoming')" 
+                id="tab-incoming"
+                class="flex-1 px-6 py-4 font-semibold text-primary border-b-2 border-primary transition">
+            Incoming Requests
+            {% if incoming_count > 0 %}
+            <span class="ml-2 px-2 py-1 bg-orange bg-opacity-10 text-orange rounded-full text-xs">
+                {{ incoming_count }}
+            </span>
+            {% endif %}
+        </button>
+        <button onclick="showTab('outgoing')" 
+                id="tab-outgoing"
+                class="flex-1 px-6 py-4 font-semibold text-body-color dark:text-dark-6 hover:text-primary transition">
+            Outgoing Requests
+        </button>
+    </div>
+</div>
+
+<!-- Tab Content -->
+<div>
+    
+    <!-- Incoming Requests Tab -->
+    <div id="incoming" class="tab-content">
+        
+        {% if incoming_requests %}
+        <div class="space-y-4">
+            {% for request in incoming_requests %}
+            <div class="bg-white dark:bg-dark-2 rounded-xl p-6 shadow-lg border-l-4 
+                        {% if request.status == 'pending' %}border-orange
+                        {% elif request.status == 'accepted' %}border-green
+                        {% else %}border-red{% endif %}">
+                
+                <div class="flex flex-col lg:flex-row gap-6">
+                    
+                    <!-- Item Image -->
+                    <div class="w-full lg:w-32 h-32 rounded-lg bg-gradient-to-br from-primary to-blue-dark flex items-center justify-center flex-shrink-0 overflow-hidden">
+                        {% if request.item_image %}
+                        <img src="{{ url_for('static', filename='uploads/' + request.item_image) }}" 
+                             class="w-full h-full object-cover" alt="{{ request.item_name }}">
+                        {% else %}
+                        <i class="fas fa-box text-4xl text-white"></i>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Request Details -->
+                    <div class="flex-1 min-w-0">
+                        
+                        <!-- Header -->
+                        <div class="flex items-start justify-between mb-4">
+                            <div>
+                                <h3 class="text-xl font-bold text-dark dark:text-white mb-2">
+                                    Request for: {{ request.item_name }}
+                                </h3>
+                                <div class="flex items-center gap-4 text-sm text-body-color dark:text-dark-6">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-purple flex items-center justify-center text-white font-bold text-xs">
+                                            {{ request.requester_name[0].upper() }}
+                                        </div>
+                                        <span class="font-semibold">{{ request.requester_name }}</span>
+                                    </div>
+                                    <span><i class="fas fa-clock mr-1"></i>{{ request.time_ago }}</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Status Badge -->
+                            <span class="px-4 py-2 rounded-full text-sm font-semibold
+                                        {% if request.status == 'pending' %}bg-orange bg-opacity-10 text-orange
+                                        {% elif request.status == 'accepted' %}bg-green bg-opacity-10 text-green
+                                        {% else %}bg-red bg-opacity-10 text-red{% endif %}">
+                                {{ request.status|capitalize }}
+                            </span>
+                        </div>
+                        
+                        <!-- Message -->
+                        <div class="mb-4 p-4 bg-gray-1 dark:bg-dark rounded-lg">
+                            <p class="text-sm font-semibold text-dark dark:text-white mb-1">Message:</p>
+                            <p class="text-body-color dark:text-dark-6">{{ request.message }}</p>
+                        </div>
+                        
+                        <!-- Contact Info (if accepted) -->
+                        {% if request.status == 'accepted' %}
+                        <div class="p-4 bg-green bg-opacity-5 border border-green border-opacity-20 rounded-lg mb-4">
+                            <p class="text-sm font-semibold text-dark dark:text-white mb-2">
+                                <i class="fas fa-check-circle text-green mr-2"></i>Swap Accepted! Contact Details:
+                            </p>
+                            <p class="text-sm text-body-color dark:text-dark-6">
+                                <i class="fas fa-envelope mr-2"></i>{{ request.requester_email }}
+                            </p>
+                            {% if request.requester_phone %}
+                            <p class="text-sm text-body-color dark:text-dark-6">
+                                <i class="fas fa-phone mr-2"></i>{{ request.requester_phone }}
+                            </p>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                        
+                        <!-- Actions (if pending) -->
+                        {% if request.status == 'pending' %}
+                        <div class="flex gap-3">
+                            <button onclick="respondToSwap({{ request.id }}, 'accepted')" 
+                                    class="flex-1 px-6 py-3 bg-green text-white rounded-lg font-semibold hover:bg-opacity-80 transition">
+                                <i class="fas fa-check mr-2"></i>Accept Swap
+                            </button>
+                            <button onclick="respondToSwap({{ request.id }}, 'rejected')" 
+                                    class="flex-1 px-6 py-3 bg-red text-white rounded-lg font-semibold hover:bg-opacity-80 transition">
+                                <i class="fas fa-times mr-2"></i>Decline
+                            </button>
+                        </div>
+                        {% endif %}
+                        
+                    </div>
+                    
+                </div>
+                
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <!-- Empty State -->
+        <div class="bg-white dark:bg-dark-2 rounded-xl p-12 shadow-lg text-center">
+            <i class="fas fa-inbox text-6xl text-body-color dark:text-dark-6 opacity-50 mb-4"></i>
+            <h3 class="text-xl font-bold text-dark dark:text-white mb-2">No Incoming Requests</h3>
+            <p class="text-body-color dark:text-dark-6">
+                When someone wants to swap with you, their requests will appear here
+            </p>
+        </div>
+        {% endif %}
+        
+    </div>
+    
+    <!-- Outgoing Requests Tab -->
+    <div id="outgoing" class="tab-content hidden">
+        
+        {% if outgoing_requests %}
+        <div class="space-y-4">
+            {% for request in outgoing_requests %}
+            <div class="bg-white dark:bg-dark-2 rounded-xl p-6 shadow-lg border-l-4
+                        {% if request.status == 'pending' %}border-orange
+                        {% elif request.status == 'accepted' %}border-green
+                        {% else %}border-red{% endif %}">
+                
+                <div class="flex flex-col lg:flex-row gap-6">
+                    
+                    <!-- Item Image -->
+                    <div class="w-full lg:w-32 h-32 rounded-lg bg-gradient-to-br from-purple to-pink-500 flex items-center justify-center flex-shrink-0 overflow-hidden">
+                        {% if request.item_image %}
+                        <img src="{{ url_for('static', filename='uploads/' + request.item_image) }}" 
+                             class="w-full h-full object-cover" alt="{{ request.item_name }}">
+                        {% else %}
+                        <i class="fas fa-box text-4xl text-white"></i>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Request Details -->
+                    <div class="flex-1 min-w-0">
+                        
+                        <div class="flex items-start justify-between mb-4">
+                            <div>
+                                <h3 class="text-xl font-bold text-dark dark:text-white mb-2">
+                                    You requested: {{ request.item_name }}
+                                </h3>
+                                <div class="flex items-center gap-4 text-sm text-body-color dark:text-dark-6">
+                                    <span><i class="fas fa-user mr-1"></i>Owner: {{ request.owner_name }}</span>
+                                    <span><i class="fas fa-clock mr-1"></i>{{ request.time_ago }}</span>
+                                </div>
+                            </div>
+                            
+                            <span class="px-4 py-2 rounded-full text-sm font-semibold
+                                        {% if request.status == 'pending' %}bg-orange bg-opacity-10 text-orange
+                                        {% elif request.status == 'accepted' %}bg-green bg-opacity-10 text-green
+                                        {% else %}bg-red bg-opacity-10 text-red{% endif %}">
+                                {{ request.status|capitalize }}
+                            </span>
+                        </div>
+                        
+                        <div class="mb-4 p-4 bg-gray-1 dark:bg-dark rounded-lg">
+                            <p class="text-sm font-semibold text-dark dark:text-white mb-1">Your message:</p>
+                            <p class="text-body-color dark:text-dark-6">{{ request.message }}</p>
+                        </div>
+                        
+                        <!-- Contact Info (if accepted) -->
+                        {% if request.status == 'accepted' %}
+                        <div class="p-4 bg-green bg-opacity-5 border border-green border-opacity-20 rounded-lg">
+                            <p class="text-sm font-semibold text-dark dark:text-white mb-2">
+                                <i class="fas fa-check-circle text-green mr-2"></i>Request Accepted! Contact {{ request.owner_name }}:
+                            </p>
+                            <p class="text-sm text-body-color dark:text-dark-6">
+                                <i class="fas fa-envelope mr-2"></i>{{ request.owner_email }}
+                            </p>
+                            {% if request.owner_phone %}
+                            <p class="text-sm text-body-color dark:text-dark-6">
+                                <i class="fas fa-phone mr-2"></i>{{ request.owner_phone }}
+                            </p>
+                            {% endif %}
+                        </div>
+                        {% elif request.status == 'rejected' %}
+                        <div class="p-4 bg-red bg-opacity-5 border border-red border-opacity-20 rounded-lg">
+                            <p class="text-sm text-body-color dark:text-dark-6">
+                                <i class="fas fa-times-circle text-red mr-2"></i>This swap request was declined
+                            </p>
+                        </div>
+                        {% endif %}
+                        
+                    </div>
+                    
+                </div>
+                
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="bg-white dark:bg-dark-2 rounded-xl p-12 shadow-lg text-center">
+            <i class="fas fa-paper-plane text-6xl text-body-color dark:text-dark-6 opacity-50 mb-4"></i>
+            <h3 class="text-xl font-bold text-dark dark:text-white mb-2">No Outgoing Requests</h3>
+            <p class="text-body-color dark:text-dark-6 mb-6">
+                You haven't sent any swap requests yet
+            </p>
+            <a href="{{ url_for('browse_items') }}" 
+               class="inline-block px-6 py-3 bg-primary text-white rounded-lg font-semibold hover:bg-blue-dark transition">
+                <i class="fas fa-search mr-2"></i>Browse Items
+            </a>
+        </div>
+        {% endif %}
+        
+    </div>
+    
+</div>
+
+<script>
+function showTab(tabId) {
+    // Hide all tabs
+    document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.add('hidden');
+    });
+    
+    // Remove active from all buttons
+    document.querySelectorAll('[id^="tab-"]').forEach(tab => {
+        tab.classList.remove('text-primary', 'border-b-2', 'border-primary');
+        tab.classList.add('text-body-color', 'dark:text-dark-6');
+    });
+    
+    // Show selected tab
+    document.getElementById(tabId).classList.remove('hidden');
+    
+    // Activate button
+    const activeTab = document.getElementById('tab-' + tabId);
+    activeTab.classList.remove('text-body-color', 'dark:text-dark-6');
+    activeTab.classList.add('text-primary', 'border-b-2', 'border-primary');
+}
+
+function respondToSwap(requestId, action) {
+    const confirmMsg = action === 'accepted' 
+        ? 'Accept this swap request? Your contact info will be shared.' 
+        : 'Decline this swap request?';
+    
+    if (confirm(confirmMsg)) {
+        fetch(`/swap/respond/${requestId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ action: action })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Failed to respond to swap request');
+            }
+        });
+    }
+}
+</script>
+
+{% endblock %}
