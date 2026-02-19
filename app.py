@@ -728,7 +728,7 @@ def unsave_item(item_id):
     """, (session['user_id'], item_id))
     db.commit()
 
-    flash("Item removed from saved items.", "success")
+    flash("Item removed from saved items.", "warning")
     return redirect(url_for("item_detail", item_id=item_id))
 
 

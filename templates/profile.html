@@ -250,10 +250,13 @@ Delete</button>
                                    class="px-4 py-2 bg-primary text-white text-sm rounded-lg hover:bg-blue-dark transition text-center whitespace-nowrap">
                                     View Item
                                 </a>
-                                <button onclick="unsaveItem('{{ item.id }}')" 
-                                        class="px-4 py-2 bg-gray-2 dark:bg-dark-3 text-body-color dark:text-white text-sm rounded-lg hover:bg-gray-3 transition whitespace-nowrap">
-                                    <i class="fas fa-heart-broken"></i>
-                                </button>
+
+                                   <form method="POST" action="{{ url_for('unsave_item', item_id=item.id) }}">
+    <button type="submit" class="px-4 py-2 bg-gray-1 dark:bg-dark rounded-lg hover:bg-gray-2 dark:hover:bg-dark-3 transition">
+        <i class="fas fa-heart-broken"></i>
+    </button>
+</form>
+
                             </div>
                         </div>
                         {% endfor %}

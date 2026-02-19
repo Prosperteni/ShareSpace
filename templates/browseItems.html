@@ -114,10 +114,14 @@
     </form>
     {% endif %}
 
-    <button onclick="saveItem('{{ item.id }}')" 
-            class="px-4 py-2 bg-gray-1 dark:bg-dark rounded-lg hover:bg-gray-2 dark:hover:bg-dark-3 transition">
+
+
+    <form method="POST" action="{{ url_for('save_item', item_id=item.id) }}">
+    <button type="submit" class="px-4 py-2 bg-gray-1 dark:bg-dark rounded-lg hover:bg-gray-2 dark:hover:bg-dark-3 transition">
         <i class="fas fa-heart"></i>
     </button>
+</form>
+
 
 </div>
 
