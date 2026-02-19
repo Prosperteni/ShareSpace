@@ -149,10 +149,12 @@
                                    class="px-4 py-2 bg-primary text-white text-sm rounded-lg hover:bg-blue-dark transition text-center whitespace-nowrap">
                                     View
                                 </a>
-                                <button onclick="deleteItem({{ item.id }})" 
-                                        class="px-4 py-2 bg-red bg-opacity-10 text-red text-sm rounded-lg hover:bg-opacity-20 transition whitespace-nowrap">
-                                    Delete
-                                </button>
+                                <form method="POST" action="{{ url_for('delete_item', item_id=item.id) }}">
+    <button type="submit"                                         class="px-4 py-2 bg-red bg-opacity-10 text-red text-sm rounded-lg hover:bg-opacity-20 transition whitespace-nowrap">
+Delete</button>
+</form>
+
+ 
                             </div>
                         </div>
                         
@@ -248,7 +250,7 @@
                                    class="px-4 py-2 bg-primary text-white text-sm rounded-lg hover:bg-blue-dark transition text-center whitespace-nowrap">
                                     View Item
                                 </a>
-                                <button onclick="unsaveItem({{ item.id }})" 
+                                <button onclick="unsaveItem('{{ item.id }}')" 
                                         class="px-4 py-2 bg-gray-2 dark:bg-dark-3 text-body-color dark:text-white text-sm rounded-lg hover:bg-gray-3 transition whitespace-nowrap">
                                     <i class="fas fa-heart-broken"></i>
                                 </button>
@@ -407,21 +409,7 @@ function showTab(tabId) {
     }
 }
 
-function deleteItem(itemId) {
-    if (confirm('Are you sure you want to delete this item?')) {
-        fetch(`/delete-item/${itemId}`, {
-            method: 'DELETE',
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                location.reload();
-            } else {
-                alert('Failed to delete item');
-            }
-        });
-    }
-}
+
 
 function unsaveItem(itemId) {
     fetch(`/unsave-item/${itemId}`, {

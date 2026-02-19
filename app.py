@@ -470,7 +470,7 @@ def delete_account():
     return redirect(url_for('index'))
 
 # Delete Item Route
-@app.route('/delete-item/<int:item_id>', methods=['DELETE'])
+@app.route('/delete-item/<int:item_id>', methods=['POST'])
 def delete_item(item_id):
     if 'user_id' not in session:
         return jsonify({'success': False, 'error': 'Not logged in'}), 401
@@ -484,10 +484,12 @@ def delete_item(item_id):
     ).fetchone()
 
     if not item:
-        return jsonify({'success': False, 'error': 'Item not found'}), 404
-
-    if item['owner_id'] != session['user_id']:
-        return jsonify({'success': False, 'error': 'Forbidden'}), 403
+        flash("Item not found.", "danger")
+        return redirect(url_for("profile"))
+    
+    if item["owner_id"] != session['user_id']:
+        flash("You cannot delete this item.", "danger")
+        return redirect(url_for("profile"))
 
     
     # Delete image file if exists
@@ -501,7 +503,8 @@ def delete_item(item_id):
     db.execute('DELETE FROM items WHERE id = ?', (item_id,))
     db.commit()
     
-    return jsonify({'success': True})
+    flash("Item deleted successfully.", "success")
+    return redirect(url_for("profile"))
 
 
 
@@ -665,12 +668,12 @@ def upload():
 @app.route('/save-item/<int:item_id>', methods=['POST'])
 def save_item(item_id):
     if 'user_id' not in session:
-        return jsonify({'success': False, 'error': 'Not logged in'}), 401
+        flash("Please login first.", "danger")
+        return redirect(url_for("login"))
 
     user_id = session['user_id']
     db = get_db()
 
-    # 1️⃣ Check item exists and is active
     item = db.execute("""
         SELECT id, owner_id, is_active
         FROM items
@@ -678,46 +681,55 @@ def save_item(item_id):
     """, (item_id,)).fetchone()
 
     if not item:
-        return jsonify({'success': False, 'error': 'Item not found'}), 404
+        flash("Item not found.", "danger")
+        return redirect(url_for("browse_items"))
 
     if item['is_active'] != 1:
-        return jsonify({'success': False, 'error': 'Item not available'}), 400
+        flash("Item not available.", "warning")
+        return redirect(url_for("item_detail", item_id=item_id))
 
-    # 2️⃣ Prevent saving your own item
     if item['owner_id'] == user_id:
-        return jsonify({'success': False, 'error': 'Cannot save your own item'}), 400
+        flash("Cannot save your own item.", "warning")
+        return redirect(url_for("item_detail", item_id=item_id))
 
-    # 3️⃣ Prevent duplicates
     existing = db.execute("""
         SELECT 1 FROM saved_items
         WHERE user_id = ? AND item_id = ?
     """, (user_id, item_id)).fetchone()
 
     if existing:
-        return jsonify({'success': False, 'error': 'Already saved'}), 400
+        flash("Item already saved.", "warning")
+        return redirect(url_for("item_detail", item_id=item_id))
 
-    # 4️⃣ Insert
     db.execute("""
         INSERT INTO saved_items (user_id, item_id)
         VALUES (?, ?)
     """, (user_id, item_id))
     db.commit()
 
-    return jsonify({'success': True})
+    flash("Item saved successfully.", "success")
+    return redirect(url_for("item_detail", item_id=item_id))
+
+
+
+
 
 @app.route('/unsave-item/<int:item_id>', methods=['POST'])
 def unsave_item(item_id):
     if 'user_id' not in session:
-        return jsonify({'success': False}), 401
+        flash("Please login first.", "danger")
+        return redirect(url_for("login"))
 
     db = get_db()
+
     db.execute("""
         DELETE FROM saved_items
         WHERE user_id = ? AND item_id = ?
     """, (session['user_id'], item_id))
     db.commit()
 
-    return jsonify({'success': True})
+    flash("Item removed from saved items.", "success")
+    return redirect(url_for("item_detail", item_id=item_id))
 
 
 @app.route('/notifications')
