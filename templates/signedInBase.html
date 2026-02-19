@@ -199,20 +199,20 @@
        document.addEventListener("DOMContentLoaded", function () {
     const toasts = document.querySelectorAll(".toast");
 
-    toasts.forEach((toast, index) => {
-        // Stagger slightly if multiple
-        setTimeout(() => {
-            toast.style.transition = "opacity 0.4s ease, transform 0.4s ease";
-            toast.style.opacity = "0";
-            toast.style.transform = "translateY(-10px)";
-
+        toasts.forEach((toast, index) => {
+            // Stagger slightly if multiple
             setTimeout(() => {
-                toast.remove();
-            }, 400);
+                toast.style.transition = "opacity 0.4s ease, transform 0.4s ease";
+                toast.style.opacity = "0";
+                toast.style.transform = "translateY(-10px)";
 
-        }, 3000 + (index * 200)); // 3 seconds
+                setTimeout(() => {
+                    toast.remove();
+                }, 400);
+
+            }, 3000 + (index * 200)); // 3 seconds
+        });
     });
-});
 
     </script>
 
