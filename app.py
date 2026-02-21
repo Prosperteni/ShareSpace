@@ -694,7 +694,7 @@ def save_item(item_id):
 
     if item['owner_id'] == user_id:
         flash("Cannot save your own item.", "warning")
-        return redirect(url_for("item_detail", item_id=item_id))
+        return redirect(url_for("browse_items", item_id=item_id))
 
     existing = db.execute("""
         SELECT 1 FROM saved_items
@@ -703,7 +703,7 @@ def save_item(item_id):
 
     if existing:
         flash("Item already saved.", "warning")
-        return redirect(url_for("item_detail", item_id=item_id))
+        return redirect(url_for("browse_items", item_id=item_id))
 
     db.execute("""
         INSERT INTO saved_items (user_id, item_id)
@@ -712,7 +712,7 @@ def save_item(item_id):
     db.commit()
 
     flash("Item saved successfully.", "success")
-    return redirect(url_for("item_detail", item_id=item_id))
+    return redirect(url_for("browse_items", item_id=item_id))
 
 
 
@@ -733,7 +733,7 @@ def unsave_item(item_id):
     db.commit()
 
     flash("Item removed from saved items.", "warning")
-    return redirect(url_for("item_detail", item_id=item_id))
+    return redirect(url_for("profile") + "#saved-items")
 
 
 @app.route('/notifications')

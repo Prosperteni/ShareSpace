@@ -376,7 +376,7 @@ Delete</button>
                         </p>
                         
                         <button onclick="confirmDeleteAccount()" 
-                                class="px-6 py-3 bg-red text-white rounded-lg font-semibold hover:bg-opacity-80 transition">
+                                class="px-6 py-3 bg-red-900 text-body-color dark:text-dark-6 rounded-lg font-semibold hover:bg-opacity-80 transition">
                             <i class="fas fa-trash mr-2"></i>Delete Account
                         </button>
                     </div>
@@ -394,22 +394,25 @@ function showTab(tabId) {
     document.querySelectorAll('.tab-content').forEach(content => {
         content.classList.add('hidden');
     });
-    
+
     // Remove active state from all tabs
     document.querySelectorAll('[id^="tab-"]').forEach(tab => {
         tab.classList.remove('text-primary', 'border-b-2', 'border-primary');
         tab.classList.add('text-body-color', 'dark:text-dark-6');
     });
-    
+
     // Show selected tab content
     document.getElementById(tabId).classList.remove('hidden');
-    
-    // Add active state to selected tab
+
+    // Add active styling to selected tab
     const activeTab = document.getElementById('tab-' + tabId);
     if (activeTab) {
         activeTab.classList.remove('text-body-color', 'dark:text-dark-6');
         activeTab.classList.add('text-primary', 'border-b-2', 'border-primary');
     }
+
+    // Update URL hash
+    window.location.hash = tabId;
 }
 
 
@@ -436,6 +439,14 @@ function confirmDeleteAccount() {
         }
     }
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+    const hash = window.location.hash;
+
+    if (hash) {
+        showTab(hash.replace('#', ''));
+    }
+});
 </script>
 
 {% endblock %}
