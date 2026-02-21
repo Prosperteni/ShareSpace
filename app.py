@@ -268,7 +268,11 @@ def respond_to_swap(request_id):
 
     db.commit()
 
-    return {"success": True}
+    return jsonify( success=True,
+                   message="Swap accepted successfully." if action == "accepted"
+                else "Swap declined.",
+        status=action
+    )
 
 @app.route("/swap/request/<int:item_id>", methods=["POST"])
 def request_swap(item_id):
@@ -317,7 +321,7 @@ def request_swap(item_id):
 
     
     flash("Swap request sent successfully.", "success")
-    return redirect(url_for("browse_items", item_id=item_id))
+    return redirect(url_for("browse_items", item_id=item_id, existing=True))
 
 
 

@@ -10,7 +10,7 @@
 
 <!-- Top Bar -->
 <div class="mb-8">
-    <h1 class="text-3xl font-bold text-dark dark:text-white mb-1">Browse Items</h1>
+    <h1 class="text-3xl font-bold mb-1">Browse Items</h1>
     <p class="text-body-color dark:text-dark-6">
         Find items to swap with fellow students on campus
     </p>
@@ -105,14 +105,23 @@
         View Details
     </a>
 
-    {% if session.get('user_id') and item.owner_id != session.get('user_id') and item.is_active == 1 %}
-    <form action="{{ url_for('request_swap', item_id=item.id) }}" method="POST" class="flex-1">
-        <button type="submit"
-                class="w-full bg-green-600 text-white py-2 rounded-lg font-semibold hover:bg-green-700 transition">
-            Request Swap
+{% if session.get('user_id') and item.owner_id != session.get('user_id') and item.is_active == 1 %}
+
+    {% if existing %}
+        <form action="{{ url_for('request_swap', item_id=item.id) }}" method="POST" class="flex-1">
+            <button type="submit"
+                    class="w-full bg-green-600 text-white py-2 rounded-lg font-semibold hover:bg-green-700 transition">
+                Request Swap
+            </button>
+        </form>
+    {% else %}
+        <button disabled
+                class="w-full bg-gray-400 text-white py-2 rounded-lg font-semibold cursor-not-allowed opacity-70 flex-1">
+            Swap Request Sent
         </button>
-    </form>
     {% endif %}
+
+{% endif %}
 
 
 

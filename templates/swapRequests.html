@@ -10,7 +10,7 @@
 
 <!-- Top Bar -->
 <div class="mb-8">
-    <h1 class="text-3xl font-bold text-dark dark:text-white mb-1">
+    <h1 class="text-3xl font-bold mb-1">
         <i class="fas fa-handshake text-primary mr-2"></i>Swap Requests
     </h1>
     <p class="text-body-color dark:text-dark-6">
@@ -132,16 +132,23 @@
                         
                         <!-- Actions (if pending) -->
                         {% if request.status == 'pending' %}
-                        <div class="flex gap-3">
-                            <button onclick="respondToSwap('{{ request.id }}', 'accepted')" 
-                                    class="flex-1 px-6 py-3 bg-green text-white rounded-lg font-semibold hover:bg-opacity-80 transition">
-                                <i class="fas fa-check mr-2"></i>Accept Swap
-                            </button>
-                            <button onclick="respondToSwap('{{ request.id }}', 'rejected')" 
-                                    class="flex-1 px-6 py-3 bg-red text-white rounded-lg font-semibold hover:bg-opacity-80 transition">
-                                <i class="fas fa-times mr-2"></i>Decline
-                            </button>
-                        </div>
+
+
+
+<div class="flex gap-3">
+    <button onclick="respondToSwap('{{ request.id }}', 'accepted', this)"
+            class="flex-1 px-6 py-3 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition">
+        <i class="fas fa-check mr-2"></i>Accept Swap
+    </button>
+
+    <button onclick="respondToSwap('{{ request.id }}', 'rejected', this)" 
+            class="flex-1 px-6 py-3 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition">
+        <i class="fas fa-times mr-2"></i>Decline
+    </button>
+
+</div>
+
+
                         {% endif %}
                         
                     </div>
@@ -284,29 +291,50 @@ function showTab(tabId) {
     activeTab.classList.add('text-primary', 'border-b-2', 'border-primary');
 }
 
-function respondToSwap(requestId, action) {
-    const confirmMsg = action === 'accepted' 
-        ? 'Accept this swap request? Your contact info will be shared.' 
-        : 'Decline this swap request?';
-    
-    if (confirm(confirmMsg)) {
-        fetch(`/swap/respond/${requestId}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ action: action })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                location.reload();
-            } else {
-                alert('Failed to respond to swap request');
+
+function respondToSwap(requestId, action, buttonEl) {
+
+    fetch(`/swap/respond/${requestId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: action })
+    })
+    .then(response => response.json())
+    .then(data => {
+
+        if (data.success) {
+
+            // Show toast
+            showToast(
+                action === 'accepted'
+                    ? "Swap accepted successfully."
+                    : "Swap declined.",
+                action === 'accepted' ? "success" : "warning"
+            );
+
+            // Update UI without reload
+            const card = buttonEl.closest(".border-l-4");
+
+            // Remove action buttons
+            const actionDiv = buttonEl.closest(".flex.gap-3");
+            if (actionDiv) actionDiv.remove();
+
+            // Update status badge
+            const badge = card.querySelector("span.rounded-full");
+            if (badge) {
+                badge.textContent = action.charAt(0).toUpperCase() + action.slice(1);
+
+                badge.className = action === 'accepted'
+                    ? "px-4 py-2 rounded-full text-sm font-semibold bg-green bg-opacity-10 text-green"
+                    : "px-4 py-2 rounded-full text-sm font-semibold bg-red bg-opacity-10 text-red";
             }
-        });
-    }
+
+        } else {
+            showToast("Failed to update request.", "danger");
+        }
+    });
 }
+
 </script>
 
 {% endblock %}

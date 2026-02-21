@@ -10,7 +10,7 @@
 
 <!-- Top Bar -->
 <div class="mb-8">
-    <h1 class="text-3xl font-bold text-dark dark:text-white mb-1">My Profile</h1>
+    <h1 class="text-3xl font-bold mb-1">My Profile</h1>
     <p class="text-body-color dark:text-dark-6">
         Manage your account information and swap history
     </p>
@@ -41,16 +41,16 @@
                 <div class="w-32 h-32 rounded-full bg-gradient-to-br from-primary to-purple mx-auto flex items-center justify-center text-white text-4xl font-bold mb-4">
                     {{ session.username[0].upper() }}
                 </div>
-                <h2 class="text-xl font-bold text-dark dark:text-white mb-1">
+                <h2 class="text-xl font-bold text-body-color mb-1">
                     {{ session.username }}
                 </h2>
-                <p class="text-sm text-body-color dark:text-dark-6">
+                <p class="text-sm text-body-color">
                     {{ session.email }}
                 </p>
-                <p class="text-xs text-body-color dark:text-dark-6 mt-1">
+                <p class="text-xs text-body-color mt-1">
                     <i class="fas fa-map-marker-alt mr-1"></i>{{ session.hostel or 'Campus' }}
                 </p>
-                <p class="text-xs text-body-color dark:text-dark-6 mt-1">
+                <p class="text-xs text-body-color mt-1">
                     <i class="fas fa-phone mr-1"></i>{{ session.phone or 'No phone' }}
                 </p>
             </div>
