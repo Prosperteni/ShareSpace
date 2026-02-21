@@ -38,10 +38,10 @@
             
             <!-- Profile Picture -->
             <div class="text-center mb-6">
-                <div class="w-32 h-32 rounded-full bg-gradient-to-br from-primary to-purple mx-auto flex items-center justify-center text-white text-4xl font-bold mb-4">
+                <div class="w-32 h-32 rounded-full bg-gradient-to-br from-primary to-purple mx-auto flex items-center justify-center text-primary text-4xl font-bold mb-4">
                     {{ session.username[0].upper() }}
                 </div>
-                <h2 class="text-xl font-bold text-body-color mb-1">
+                <h2 class="text-xl font-bold text-primary mb-1">
                     {{ session.username }}
                 </h2>
                 <p class="text-sm text-body-color">
@@ -252,12 +252,12 @@ Delete</button>
                                 </a>
 
                                    <form method="POST" action="{{ url_for('unsave_item', item_id=item.id) }}">
-    <button type="submit" class="px-4 py-2 bg-gray-1 dark:bg-dark rounded-lg hover:bg-gray-2 dark:hover:bg-dark-3 transition">
-        <i class="fas fa-heart-broken"></i>
-    </button>
-</form>
+            <button type="submit" class="px-4 py-2 bg-gray-1 dark:bg-dark rounded-lg hover:bg-gray-2 dark:hover:bg-dark-3 transition">
+                <i class="fas fa-heart-broken"></i>
+            </button>
+        </form>
 
-                            </div>
+                            </div>s
                         </div>
                         {% endfor %}
                     </div>

@@ -50,7 +50,7 @@
     <div class="bg-white dark:bg-dark-2 rounded-xl p-6 shadow-lg hover:shadow-xl transition transform hover:-translate-y-1">
         <div class="flex items-center justify-between mb-4">
             <div>
-                <div class="text-4xl font-bold text-dark dark:text-white mb-1">{{ stats.active_offers or 0 }}</div>
+                <div class="text-4xl font-bold text-body-color dark:text-dark-6 mb-1">{{ stats.active_offers or 0 }}</div>
                 <div class="text-sm font-medium text-body-color dark:text-dark-6">Items for Swap</div>
             </div>
             <div class="w-12 h-12 rounded-xl bg-primary bg-opacity-10 flex items-center justify-center text-primary text-xl">
@@ -66,7 +66,7 @@
     <div class="bg-white dark:bg-dark-2 rounded-xl p-6 shadow-lg hover:shadow-xl transition transform hover:-translate-y-1">
         <div class="flex items-center justify-between mb-4">
             <div>
-                <div class="text-4xl font-bold text-dark dark:text-white mb-1">{{ stats.pending_requests or 0 }}</div>
+                <div class="text-4xl font-bold text-body-color dark:text-dark-6 mb-1">{{ stats.pending_requests or 0 }}</div>
                 <div class="text-sm font-medium text-body-color dark:text-dark-6">Swap Requests</div>
             </div>
             <div class="w-12 h-12 rounded-xl bg-orange bg-opacity-10 flex items-center justify-center text-orange text-xl">
@@ -82,7 +82,7 @@
     <div class="bg-white dark:bg-dark-2 rounded-xl p-6 shadow-lg hover:shadow-xl transition transform hover:-translate-y-1">
         <div class="flex items-center justify-between mb-4">
             <div>
-                <div class="text-4xl font-bold text-dark dark:text-white mb-1">{{ stats.completed_swaps or 0 }}</div>
+                <div class="text-4xl font-bold text-body-color dark:text-dark-6 mb-1">{{ stats.completed_swaps or 0 }}</div>
                 <div class="text-sm font-medium text-body-color dark:text-dark-6">Swaps Done</div>
             </div>
             <div class="w-12 h-12 rounded-xl bg-green bg-opacity-10 flex items-center justify-center text-green text-xl">
@@ -98,7 +98,7 @@
     <div class="bg-white dark:bg-dark-2 rounded-xl p-6 shadow-lg hover:shadow-xl transition transform hover:-translate-y-1">
         <div class="flex items-center justify-between mb-4">
             <div>
-                <div class="text-4xl font-bold text-dark dark:text-white mb-1">{{ stats.matches or 0 }}</div>
+                <div class="text-4xl font-bold text-body-color dark:text-dark-6 mb-1">{{ stats.matches or 0 }}</div>
                 <div class="text-sm font-medium text-body-color dark:text-dark-6">New Matches</div>
             </div>
             <div class="w-12 h-12 rounded-xl bg-purple bg-opacity-10 flex items-center justify-center text-purple text-xl">
@@ -117,7 +117,7 @@
     <!-- Pending Swap Requests -->
     <div class="lg:col-span-2 bg-white dark:bg-dark-2 rounded-xl p-6 shadow-lg">
         <div class="flex items-center justify-between mb-6">
-            <h2 class="text-xl font-bold text-dark dark:text-white flex items-center gap-2">
+            <h2 class="text-xl font-bold text-body-color dark:text-dark-6 flex items-center gap-2">
                 <i class="fas fa-handshake text-primary"></i>
                 Incoming Swap Requests
             </h2>
@@ -151,11 +151,11 @@
 
                 <!-- Action Buttons -->
                 <div class="flex flex-col gap-2">
-                    <button onclick="respondSwap({{ request.id }}, 'accept')" 
+                    <button onclick="respondSwap('{{ request.id }}', 'accept')" 
                             class="px-4 py-2 bg-green text-white text-sm rounded-lg hover:bg-opacity-80 transition whitespace-nowrap">
                         <i class="fas fa-check mr-1"></i>Accept
                     </button>
-                    <button onclick="respondSwap({{ request.id }}, 'reject')" 
+                    <button onclick="respondSwap('{{ request.id }}', 'reject')" 
                             class="px-4 py-2 bg-red text-white text-sm rounded-lg hover:bg-opacity-80 transition whitespace-nowrap">
                         <i class="fas fa-times mr-1"></i>Decline
                     </button>
@@ -184,7 +184,7 @@
         <!-- Swap Success Rate -->
         <div class="mb-6 p-4 bg-gray-1 dark:bg-dark rounded-lg">
             <div class="flex items-center justify-between mb-2">
-                <span class="text-sm font-semibold text-dark dark:text-white">Success Rate</span>
+                <span class="text-sm font-semibold text-body-color dark:text-dark-6">Success Rate</span>
                 <span class="text-lg font-bold text-green">{{ stats.success_rate or 0 }}%</span>
             </div>
             <div class="w-full bg-gray-2 dark:bg-dark-3 rounded-full h-2">
@@ -223,7 +223,7 @@
 <div class="bg-white dark:bg-dark-2 rounded-xl p-6 shadow-lg">
     <div class="flex items-center justify-between mb-6">
         <div>
-            <h2 class="text-xl font-bold text-dark dark:text-white flex items-center gap-2">
+            <h2 class="text-xl font-bold text-body-color dark:text-dark-6 flex items-center gap-2">
                 <i class="fas fa-star text-primary"></i>
                 Perfect Matches for You
             </h2>
