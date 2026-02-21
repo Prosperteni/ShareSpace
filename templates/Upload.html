@@ -39,16 +39,16 @@
                 class="w-full bg-white dark:bg-dark-2 rounded-xl
                         p-4 sm:p-6 md:p-8 lg:p-10
                         shadow-lg">
-                        
+
                 <!-- Item Name -->
                 <div class="mb-6">
                     <label for="name" class="block text-sm font-semibold text-body-color dark:text-dark-6 mb-2">
                         Item Name <span class="text-red">*</span>
                     </label>
-                    <input 
-                        type="text" 
-                        id="name" 
-                        name="name" 
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
                         required
                         placeholder="e.g., Data Structures Textbook"
                         class="w-full px-5 py-3 bg-gray-1 dark:bg-dark border border-stroke dark:border-dark-3 rounded-lg text-body-color dark:text-dark placeholder:text-dark dark:placeholder:text-dark-6 focus:border-primary focus:outline-none transition">
@@ -59,9 +59,9 @@
                     <label for="category" class="block text-sm font-semibold text-body-color dark:text-dark-6 mb-2">
                         Category <span class="text-red">*</span>
                     </label>
-                    <select 
-                        id="category" 
-                        name="category" 
+                    <select
+                        id="category"
+                        name="category"
                         required
                         class="w-full px-5 py-3 bg-gray-1 dark:bg-dark border border-stroke dark:border-dark-3 rounded-lg text-body-color dark:text-dark focus:border-primary focus:outline-none transition">
                         <option value="">Select a category</option>
@@ -80,10 +80,10 @@
                     <label for="description" class="block text-sm font-semibold text-body-color dark:text-dark-6 mb-2">
                         Description <span class="text-red">*</span>
                     </label>
-                    <textarea 
-                        id="description" 
-                        name="description" 
-                        rows="4" 
+                    <textarea
+                        id="description"
+                        name="description"
+                        rows="4"
                         required
                         placeholder="Describe your item, its condition, and what you're looking for in exchange..."
                         class="w-full px-5 py-3 bg-gray-1 dark:bg-dark border border-stroke dark:border-dark-3 rounded-lg text-body-color dark:text-dark placeholder:text-body-color dark:placeholder:text-dark-6 focus:border-primary focus:outline-none transition resize-none"></textarea>
@@ -97,9 +97,9 @@
                     <label for="condition" class="block text-sm font-semibold text-body-color dark:text-dark-6 mb-2">
                         Condition <span class="text-red">*</span>
                     </label>
-                    <select 
-                        id="condition" 
-                        name="condition" 
+                    <select
+                        id="condition"
+                        name="condition"
                         required
                         class="w-full px-5 py-3 bg-gray-1 dark:bg-dark border border-stroke dark:border-dark-3 rounded-lg text-body-color dark:text-dark focus:border-primary focus:outline-none transition">
                         <option value="">Select condition</option>
@@ -116,10 +116,10 @@
                     <label for="looking_for" class="block text-sm font-semibold text-body-color dark:text-dark-6 mb-2">
                         What are you looking for? <span class="text-body-color dark:text-dark-6 text-xs font-normal">(Optional)</span>
                     </label>
-                    <input 
-                        type="text" 
-                        id="looking_for" 
-                        name="looking_for" 
+                    <input
+                        type="text"
+                        id="looking_for"
+                        name="looking_for"
                         placeholder="e.g., Biology textbook, Calculator, Sports equipment"
                         class="w-full px-5 py-3 bg-gray-1 dark:bg-dark border border-stroke dark:border-dark-3 rounded-lg text-body-color dark:text-dark placeholder:text-body-color dark:placeholder:text-dark-6 focus:border-primary focus:outline-none transition">
                     <p class="text-xs text-body-color dark:text-dark-6 mt-2">
@@ -133,10 +133,10 @@
                         Item Photo <span class="text-body-color dark:text-dark-6 text-xs font-normal">(Optional)</span>
                     </label>
                     <div class="border-2 border-dashed border-stroke dark:border-dark-3 rounded-lg p-8 text-center hover:border-primary transition">
-                        <input 
-                            type="file" 
-                            id="image" 
-                            name="image" 
+                        <input
+                            type="file"
+                            id="image"
+                            name="image"
                             accept="image/*"
                             class="hidden"
                             onchange="previewImage(this)">
@@ -162,10 +162,10 @@
                     <label for="Hostel" class="block text-sm font-semibold text-body-color dark:text-dark-6 mb-2">
                         Your Location <span class="text-red">*</span>
                     </label>
-                    <input 
-                        type="text" 
-                        id="hostel" 
-                        name="hostel" 
+                    <input
+                        type="text"
+                        id="hostel"
+                        name="hostel"
                         required
                         placeholder="e.g., West Hall, Room 301"
                         value="{{ session.hostel if session.hostel else '' }}"
@@ -207,13 +207,13 @@
 
                 <!-- Form Actions -->
                 <div class="flex flex-col sm:flex-row gap-4 mt-8">
-                    <button 
-                        type="submit" 
+                    <button
+                        type="submit"
                         class="flex-1 px-6 py-4 bg-primary text-white rounded-lg font-semibold hover:bg-blue-dark transition shadow-lg">
                         <i class="fas fa-plus mr-2"></i>List Item
                     </button>
-                    <a 
-                        href="/browse" 
+                    <a
+                        href="/browse"
                         class="px-6 py-4 bg-gray-1 dark:bg-dark text-body-color dark:text-dark-6 rounded-lg font-semibold hover:bg-gray-2 dark:hover:bg-dark-3 transition text-center">
                         Cancel
                     </a>
@@ -227,16 +227,16 @@
             const preview = document.getElementById('image-preview');
             const previewImg = document.getElementById('preview-img');
             const placeholder = document.getElementById('upload-placeholder');
-            
+
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
-                
+
                 reader.onload = function(e) {
                     previewImg.src = e.target.result;
                     preview.classList.remove('hidden');
                     placeholder.classList.add('hidden');
                 }
-                
+
                 reader.readAsDataURL(input.files[0]);
             }
         }

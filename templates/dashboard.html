@@ -19,7 +19,7 @@
 
 <!-- Quick Action Buttons -->
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-    <a href="{{ url_for('browse_items') }}" 
+    <a href="{{ url_for('browse_items') }}"
        class="flex items-center gap-4 p-6 bg-gradient-to-r from-primary to-blue-dark text-body-color rounded-xl shadow-lg hover:shadow-xl transition transform hover:-translate-y-1">
         <div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
             <i class="fas fa-search text-3xl"></i>
@@ -30,8 +30,8 @@
         </div>
         <i class="fas fa-arrow-right ml-auto text-2xl"></i>
     </a>
-    
-    <a href="{{ url_for('upload') }}" 
+
+    <a href="{{ url_for('upload') }}"
        class="flex items-center gap-4 p-6 bg-gradient-to-r from-green to-secondary text-body-color rounded-xl shadow-lg hover:shadow-xl transition transform hover:-translate-y-1">
         <div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
             <i class="fas fa-plus-circle text-3xl"></i>
@@ -113,7 +113,7 @@
 
 <!-- Main Content Grid -->
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-    
+
     <!-- Pending Swap Requests -->
     <div class="lg:col-span-2 bg-white dark:bg-dark-2 rounded-xl p-6 shadow-lg">
         <div class="flex items-center justify-between mb-6">
@@ -123,12 +123,12 @@
             </h2>
             <a href="/swap-requests" class="text-sm font-semibold text-primary hover:underline">View All</a>
         </div>
-        
+
         {% if swap_requests %}
         <div class="space-y-4">
             {% for request in swap_requests[:3] %}
             <div class="flex gap-4 p-4 bg-gray-1 dark:bg-dark rounded-lg border-l-4 border-orange">
-                
+
                 <!-- Requester Avatar -->
                 <div class="w-12 h-12 rounded-full bg-gradient-to-br from-orange to-red-500 flex items-center justify-center text-white font-bold flex-shrink-0">
                     {{ request.requester_name[0].upper() }}
@@ -140,7 +140,7 @@
                         {{ request.requester_name }} wants to swap
                     </h3>
                     <div class="text-sm text-body-color dark:text-dark-6 mb-2">
-                        <span class="font-medium">Their:</span> {{ request.their_item }} 
+                        <span class="font-medium">Their:</span> {{ request.their_item }}
                         <i class="fas fa-arrow-right mx-2 text-primary"></i>
                         <span class="font-medium">Your:</span> {{ request.your_item }}
                     </div>
@@ -151,11 +151,11 @@
 
                 <!-- Action Buttons -->
                 <div class="flex flex-col gap-2">
-                    <button onclick="respondSwap('{{ request.id }}', 'accept')" 
+                    <button onclick="respondSwap('{{ request.id }}', 'accept')"
                             class="px-4 py-2 bg-green text-white text-sm rounded-lg hover:bg-opacity-80 transition whitespace-nowrap">
                         <i class="fas fa-check mr-1"></i>Accept
                     </button>
-                    <button onclick="respondSwap('{{ request.id }}', 'reject')" 
+                    <button onclick="respondSwap('{{ request.id }}', 'reject')"
                             class="px-4 py-2 bg-red text-white text-sm rounded-lg hover:bg-opacity-80 transition whitespace-nowrap">
                         <i class="fas fa-times mr-1"></i>Decline
                     </button>
@@ -180,7 +180,7 @@
             <i class="fas fa-chart-line text-primary"></i>
             Your Swap Stats
         </h2>
-        
+
         <!-- Swap Success Rate -->
         <div class="mb-6 p-4 bg-gray-1 dark:bg-dark rounded-lg">
             <div class="flex items-center justify-between mb-2">
@@ -233,12 +233,12 @@
         </div>
         <a href="{{ url_for('browse_items') }}" class="text-sm font-semibold text-primary hover:underline">View All</a>
     </div>
-    
+
     {% if matches %}
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {% for match in matches %}
         <div class="p-4 bg-gray-1 dark:bg-dark rounded-lg border-2 border-primary border-opacity-20 hover:border-opacity-50 transition">
-            
+
             <!-- Match Badge -->
             <div class="flex items-center gap-2 mb-3">
                 <span class="px-3 py-1 bg-primary bg-opacity-10 text-primary text-xs font-bold rounded-full">
@@ -260,7 +260,7 @@
             </div>
 
             <!-- Action -->
-            <a href="/item/{{ match.item_id }}" 
+            <a href="/item/{{ match.item_id }}"
                class="block w-full px-4 py-2 bg-primary text-white text-sm font-semibold rounded-lg text-center hover:bg-blue-dark transition">
                 <i class="fas fa-handshake mr-2"></i>Propose Swap
             </a>
@@ -274,7 +274,7 @@
         <p class="text-body-color dark:text-dark-6 mb-6">
             Add items you're looking for to help us find matches
         </p>
-        <a href="{{ url_for('upload') }}" 
+        <a href="{{ url_for('upload') }}"
            class="inline-block px-6 py-3 bg-primary text-white rounded-lg font-semibold hover:bg-blue-dark transition">
             <i class="fas fa-plus mr-2"></i>List What You Want
         </a>

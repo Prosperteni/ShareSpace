@@ -34,7 +34,7 @@
 <!-- Tabs -->
 <div class="bg-white dark:bg-dark-2 rounded-xl shadow-lg overflow-hidden mb-6">
     <div class="flex border-b border-stroke dark:border-dark-3">
-        <button onclick="showTab('incoming')" 
+        <button onclick="showTab('incoming')"
                 id="tab-incoming"
                 class="flex-1 px-6 py-4 font-semibold text-primary border-b-2 border-primary transition">
             Incoming Requests
@@ -44,7 +44,7 @@
             </span>
             {% endif %}
         </button>
-        <button onclick="showTab('outgoing')" 
+        <button onclick="showTab('outgoing')"
                 id="tab-outgoing"
                 class="flex-1 px-6 py-4 font-semibold text-body-color dark:text-dark-6 hover:text-primary transition">
             Outgoing Requests
@@ -54,33 +54,33 @@
 
 <!-- Tab Content -->
 <div>
-    
+
     <!-- Incoming Requests Tab -->
     <div id="incoming" class="tab-content">
-        
+
         {% if incoming_requests %}
         <div class="space-y-4">
             {% for request in incoming_requests %}
-            <div class="bg-white dark:bg-dark-2 rounded-xl p-6 shadow-lg border-l-4 
+            <div class="bg-white dark:bg-dark-2 rounded-xl p-6 shadow-lg border-l-4
                         {% if request.status == 'pending' %}border-orange
                         {% elif request.status == 'accepted' %}border-green
                         {% else %}border-red{% endif %}">
-                
+
                 <div class="flex flex-col lg:flex-row gap-6">
-                    
+
                     <!-- Item Image -->
                     <div class="w-full lg:w-32 h-32 rounded-lg bg-gradient-to-br from-primary to-blue-dark flex items-center justify-center flex-shrink-0 overflow-hidden">
                         {% if request.item_image %}
-                        <img src="{{ url_for('static', filename='uploads/' + request.item_image) }}" 
+                        <img src="{{ url_for('static', filename='uploads/' + request.item_image) }}"
                              class="w-full h-full object-cover" alt="{{ request.item_name }}">
                         {% else %}
                         <i class="fas fa-box text-4xl text-white"></i>
                         {% endif %}
                     </div>
-                    
+
                     <!-- Request Details -->
                     <div class="flex-1 min-w-0">
-                        
+
                         <!-- Header -->
                         <div class="flex items-start justify-between mb-4">
                             <div>
@@ -97,7 +97,7 @@
                                     <span><i class="fas fa-clock mr-1"></i>{{ request.time_ago }}</span>
                                 </div>
                             </div>
-                            
+
                             <!-- Status Badge -->
                             <span class="px-4 py-2 rounded-full text-sm font-semibold
                                         {% if request.status == 'pending' %}bg-orange bg-opacity-10 text-orange
@@ -106,13 +106,13 @@
                                 {{ request.status|capitalize }}
                             </span>
                         </div>
-                        
+
                         <!-- Message -->
                         <div class="mb-4 p-4 bg-gray-1 dark:bg-dark rounded-lg">
                             <p class="text-sm font-semibold text-dark dark:text-white mb-1">Message:</p>
                             <p class="text-body-color dark:text-dark-6">{{ request.message }}</p>
                         </div>
-                        
+
                         <!-- Contact Info (if accepted) -->
                         {% if request.status == 'accepted' %}
                         <div class="p-4 bg-green bg-opacity-5 border border-green border-opacity-20 rounded-lg mb-4">
@@ -129,7 +129,7 @@
                             {% endif %}
                         </div>
                         {% endif %}
-                        
+
                         <!-- Actions (if pending) -->
                         {% if request.status == 'pending' %}
 
@@ -141,7 +141,7 @@
         <i class="fas fa-check mr-2"></i>Accept Swap
     </button>
 
-    <button onclick="respondToSwap('{{ request.id }}', 'rejected', this)" 
+    <button onclick="respondToSwap('{{ request.id }}', 'rejected', this)"
             class="flex-1 px-6 py-3 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition">
         <i class="fas fa-times mr-2"></i>Decline
     </button>
@@ -150,11 +150,11 @@
 
 
                         {% endif %}
-                        
+
                     </div>
-                    
+
                 </div>
-                
+
             </div>
             {% endfor %}
         </div>
@@ -168,12 +168,12 @@
             </p>
         </div>
         {% endif %}
-        
+
     </div>
-    
+
     <!-- Outgoing Requests Tab -->
     <div id="outgoing" class="tab-content hidden">
-        
+
         {% if outgoing_requests %}
         <div class="space-y-4">
             {% for request in outgoing_requests %}
@@ -181,22 +181,22 @@
                         {% if request.status == 'pending' %}border-orange
                         {% elif request.status == 'accepted' %}border-green
                         {% else %}border-red{% endif %}">
-                
+
                 <div class="flex flex-col lg:flex-row gap-6">
-                    
+
                     <!-- Item Image -->
                     <div class="w-full lg:w-32 h-32 rounded-lg bg-gradient-to-br from-purple to-pink-500 flex items-center justify-center flex-shrink-0 overflow-hidden">
                         {% if request.item_image %}
-                        <img src="{{ url_for('static', filename='uploads/' + request.item_image) }}" 
+                        <img src="{{ url_for('static', filename='uploads/' + request.item_image) }}"
                              class="w-full h-full object-cover" alt="{{ request.item_name }}">
                         {% else %}
                         <i class="fas fa-box text-4xl text-white"></i>
                         {% endif %}
                     </div>
-                    
+
                     <!-- Request Details -->
                     <div class="flex-1 min-w-0">
-                        
+
                         <div class="flex items-start justify-between mb-4">
                             <div>
                                 <h3 class="text-xl font-bold text-dark dark:text-white mb-2">
@@ -207,7 +207,7 @@
                                     <span><i class="fas fa-clock mr-1"></i>{{ request.time_ago }}</span>
                                 </div>
                             </div>
-                            
+
                             <span class="px-4 py-2 rounded-full text-sm font-semibold
                                         {% if request.status == 'pending' %}bg-orange bg-opacity-10 text-orange
                                         {% elif request.status == 'accepted' %}bg-green bg-opacity-10 text-green
@@ -215,12 +215,12 @@
                                 {{ request.status|capitalize }}
                             </span>
                         </div>
-                        
+
                         <div class="mb-4 p-4 bg-gray-1 dark:bg-dark rounded-lg">
                             <p class="text-sm font-semibold text-dark dark:text-white mb-1">Your message:</p>
                             <p class="text-body-color dark:text-dark-6">{{ request.message }}</p>
                         </div>
-                        
+
                         <!-- Contact Info (if accepted) -->
                         {% if request.status == 'accepted' %}
                         <div class="p-4 bg-green bg-opacity-5 border border-green border-opacity-20 rounded-lg">
@@ -243,11 +243,11 @@
                             </p>
                         </div>
                         {% endif %}
-                        
+
                     </div>
-                    
+
                 </div>
-                
+
             </div>
             {% endfor %}
         </div>
@@ -258,15 +258,15 @@
             <p class="text-body-color dark:text-dark-6 mb-6">
                 You haven't sent any swap requests yet
             </p>
-            <a href="{{ url_for('browse_items') }}" 
+            <a href="{{ url_for('browse_items') }}"
                class="inline-block px-6 py-3 bg-primary text-white rounded-lg font-semibold hover:bg-blue-dark transition">
                 <i class="fas fa-search mr-2"></i>Browse Items
             </a>
         </div>
         {% endif %}
-        
+
     </div>
-    
+
 </div>
 
 <script>
@@ -275,16 +275,16 @@ function showTab(tabId) {
     document.querySelectorAll('.tab-content').forEach(content => {
         content.classList.add('hidden');
     });
-    
+
     // Remove active from all buttons
     document.querySelectorAll('[id^="tab-"]').forEach(tab => {
         tab.classList.remove('text-primary', 'border-b-2', 'border-primary');
         tab.classList.add('text-body-color', 'dark:text-dark-6');
     });
-    
+
     // Show selected tab
     document.getElementById(tabId).classList.remove('hidden');
-    
+
     // Activate button
     const activeTab = document.getElementById('tab-' + tabId);
     activeTab.classList.remove('text-body-color', 'dark:text-dark-6');

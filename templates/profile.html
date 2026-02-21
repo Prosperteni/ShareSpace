@@ -31,11 +31,11 @@
 
 <!-- Profile Grid -->
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-    
+
     <!-- Left Column - Profile Card -->
     <div class="lg:col-span-1">
         <div class="bg-white dark:bg-dark-2 rounded-xl p-6 shadow-lg">
-            
+
             <!-- Profile Picture -->
             <div class="text-center mb-6">
                 <div class="w-32 h-32 rounded-full bg-gradient-to-br from-primary to-purple mx-auto flex items-center justify-center text-primary text-4xl font-bold mb-4">
@@ -58,11 +58,11 @@
 
             <!-- Quick Actions -->
             <div class="space-y-2">
-                <a href="{{ url_for('upload') }}" 
+                <a href="{{ url_for('upload') }}"
                    class="block w-full px-4 py-3 bg-primary text-white rounded-lg text-center font-semibold hover:bg-blue-dark transition">
                     <i class="fas fa-plus mr-2"></i>Add New Item
                 </a>
-                <button onclick="showTab('settings')" 
+                <button onclick="showTab('settings')"
                    class="block w-full px-4 py-3 bg-blue-dark text-dark rounded-lg text-center font-semibold hover:bg-gray-2 dark:hover:bg-primary transition">
                     <i class="fas fa-cog mr-2"></i>Account Settings
                 </button>
@@ -79,28 +79,28 @@
 
     <!-- Right Column - Tabs Content -->
     <div class="lg:col-span-2">
-        
+
         <!-- Tabs -->
         <div class="bg-white dark:bg-dark-2 rounded-xl shadow-lg overflow-hidden">
-            
+
             <!-- Tab Headers -->
             <div class="flex border-b border-stroke dark:border-dark-3 overflow-x-auto">
-                <button onclick="showTab('active-listings')" 
+                <button onclick="showTab('active-listings')"
                         id="tab-active-listings"
                         class="flex-1 px-6 py-4 font-semibold text-primary border-b-2 border-primary transition whitespace-nowrap">
                     Active Listings
                 </button>
-                <button onclick="showTab('swap-history')" 
+                <button onclick="showTab('swap-history')"
                         id="tab-swap-history"
                         class="flex-1 px-6 py-4 font-semibold text-body-color dark:text-dark-6 hover:text-primary transition whitespace-nowrap">
                     Swap History
                 </button>
-                <button onclick="showTab('saved-items')" 
+                <button onclick="showTab('saved-items')"
                         id="tab-saved-items"
                         class="flex-1 px-6 py-4 font-semibold text-body-color dark:text-dark-6 hover:text-primary transition whitespace-nowrap">
                     Saved Items
                 </button>
-                <button onclick="showTab('settings')" 
+                <button onclick="showTab('settings')"
                         id="tab-settings"
                         class="flex-1 px-6 py-4 font-semibold text-body-color dark:text-dark-6 hover:text-primary transition whitespace-nowrap">
                     Settings
@@ -109,18 +109,18 @@
 
             <!-- Tab Content -->
             <div class="p-6">
-                
+
                 <!-- Active Listings Tab -->
                 <div id="active-listings" class="tab-content">
                     {% if active_listings %}
                     <div class="space-y-4">
                         {% for item in active_listings %}
                         <div class="flex gap-4 p-4 bg-gray-1 dark:bg-dark rounded-lg hover:bg-gray-2 dark:hover:bg-dark-3 transition">
-                            
+
                             <!-- Item Image -->
                             <div class="w-20 h-20 rounded-lg bg-gradient-to-br from-primary to-blue-dark flex items-center justify-center text-white text-2xl flex-shrink-0">
                                 {% if item.image %}
-                                <img src="{{ url_for('static', filename='uploads/' + item.image) }}" 
+                                <img src="{{ url_for('static', filename='uploads/' + item.image) }}"
                                      class="w-full h-full object-cover rounded-lg" alt="{{ item.name }}">
                                 {% else %}
                                 <i class="fas fa-box"></i>
@@ -145,7 +145,7 @@
 
                             <!-- Actions -->
                             <div class="flex flex-col gap-2">
-                                <a href="/item/{{ item.id }}" 
+                                <a href="/item/{{ item.id }}"
                                    class="px-4 py-2 bg-primary text-white text-sm rounded-lg hover:bg-blue-dark transition text-center whitespace-nowrap">
                                     View
                                 </a>
@@ -154,10 +154,10 @@
 Delete</button>
 </form>
 
- 
+
                             </div>
                         </div>
-                        
+
                         {% endfor %}
                     </div>
                     {% else %}
@@ -167,7 +167,7 @@ Delete</button>
                         <p class="text-body-color dark:text-dark-6 mb-6">
                             You haven't listed any items yet
                         </p>
-                        <a href="{{ url_for('upload') }}" 
+                        <a href="{{ url_for('upload') }}"
                            class="inline-block px-6 py-3 bg-primary text-white rounded-lg font-semibold hover:bg-blue-dark transition">
                             <i class="fas fa-plus mr-2"></i>Add Your First Item
                         </a>
@@ -181,7 +181,7 @@ Delete</button>
                     <div class="space-y-4">
                         {% for swap in swap_history %}
                         <div class="flex gap-4 p-4 bg-gray-1 dark:bg-dark rounded-lg">
-                            
+
                             <!-- Swap Icon -->
                             <div class="w-12 h-12 rounded-full bg-green bg-opacity-10 flex items-center justify-center text-green flex-shrink-0">
                                 <i class="fas fa-check-circle text-xl"></i>
@@ -209,7 +209,7 @@ Delete</button>
                         <p class="text-body-color dark:text-dark-6 mb-6">
                             You haven't completed any swaps yet
                         </p>
-                        <a href="{{ url_for('browse_items') }}" 
+                        <a href="{{ url_for('browse_items') }}"
                            class="inline-block px-6 py-3 bg-primary text-white rounded-lg font-semibold hover:bg-blue-dark transition">
                             <i class="fas fa-search mr-2"></i>Browse Items
                         </a>
@@ -223,11 +223,11 @@ Delete</button>
                     <div class="space-y-4">
                         {% for item in saved_items %}
                         <div class="flex gap-4 p-4 bg-gray-1 dark:bg-dark rounded-lg hover:bg-gray-2 dark:hover:bg-dark-3 transition">
-                            
+
                             <!-- Item Image -->
                             <div class="w-20 h-20 rounded-lg bg-gradient-to-br from-purple to-pink-500 flex items-center justify-center text-white text-2xl flex-shrink-0">
                                 {% if item.image %}
-                                <img src="{{ url_for('static', filename='uploads/' + item.image) }}" 
+                                <img src="{{ url_for('static', filename='uploads/' + item.image) }}"
                                      class="w-full h-full object-cover rounded-lg" alt="{{ item.name }}">
                                 {% else %}
                                 <i class="fas fa-box"></i>
@@ -246,7 +246,7 @@ Delete</button>
 
                             <!-- Actions -->
                             <div class="flex flex-col gap-2">
-                                <a href="/item/{{ item.id }}" 
+                                <a href="/item/{{ item.id }}"
                                    class="px-4 py-2 bg-primary text-white text-sm rounded-lg hover:bg-blue-dark transition text-center whitespace-nowrap">
                                     View Item
                                 </a>
@@ -268,7 +268,7 @@ Delete</button>
                         <p class="text-body-color dark:text-dark-6 mb-6">
                             You haven't saved any items yet
                         </p>
-                        <a href="{{ url_for('browse_items') }}" 
+                        <a href="{{ url_for('browse_items') }}"
                            class="inline-block px-6 py-3 bg-primary text-white rounded-lg font-semibold hover:bg-blue-dark transition">
                             <i class="fas fa-search mr-2"></i>Browse Items
                         </a>
@@ -278,14 +278,14 @@ Delete</button>
 
                 <!-- Settings Tab -->
                 <div id="settings" class="tab-content hidden space-y-6">
-                    
+
                     <!-- Change Password Section -->
                     <div class="bg-gray-1 dark:bg-dark rounded-xl p-6">
                         <h3 class="text-xl font-bold text-body-color  mb-4 flex items-center gap-2">
                             <i class="fas fa-lock text-body-color "></i>
                             Change Password
                         </h3>
-                        
+
                         <form action="{{ url_for('change_password') }}" method="POST" class="space-y-4">
                             <div>
                                 <label class="block text-sm font-semibold text-body-color mb-2">
@@ -294,7 +294,7 @@ Delete</button>
                                 <input type="password" name="current_password" required
                                        class="w-full px-4 py-3 bg-white dark:bg-dark-2 border border-stroke dark:border-dark-3 rounded-lg text-body-color focus:border-primary focus:outline-none transition">
                             </div>
-                            
+
                             <div>
                                 <label class="block text-sm font-semibold text-body-color mb-2">
                                     New Password
@@ -302,7 +302,7 @@ Delete</button>
                                 <input type="password" name="new_password" required minlength="6"
                                        class="w-full px-4 py-3 bg-white dark:bg-dark-2 border border-stroke dark:border-dark-3 rounded-lg text-body-color focus:border-primary focus:outline-none transition">
                             </div>
-                            
+
                             <div>
                                 <label class="block text-sm font-semibold text-body-color mb-2">
                                     Confirm New Password
@@ -310,8 +310,8 @@ Delete</button>
                                 <input type="password" name="confirm_password" required minlength="6"
                                        class="w-full px-4 py-3 bg-white dark:bg-dark-2 border border-stroke dark:border-dark-3 rounded-lg text-body-color focus:border-primary focus:outline-none transition">
                             </div>
-                            
-                            <button type="submit" 
+
+                            <button type="submit"
                                     class="w-full px-6 py-3 bg-primary text-white rounded-lg font-semibold hover:bg-blue-dark transition">
                                 <i class="fas fa-check mr-2"></i>Update Password
                             </button>
@@ -324,7 +324,7 @@ Delete</button>
                             <i class="fas fa-user-edit text-primary"></i>
                             Edit Profile Information
                         </h3>
-                        
+
                         <form action="{{ url_for('update_profile') }}" method="POST" class="space-y-4">
                             <div>
                                 <label class="block text-sm font-semibold text-body-color mb-2">
@@ -333,7 +333,7 @@ Delete</button>
                                 <input type="text" name="username" value="{{ session.username }}" required
                                        class="w-full px-4 py-3 bg-white dark:bg-dark-2 border border-stroke dark:border-dark-3 rounded-lg text-body-color focus:border-primary focus:outline-none transition">
                             </div>
-                            
+
                             <div>
                                 <label class="block text-sm font-semibold text-body-color mb-2">
                                     Email
@@ -341,7 +341,7 @@ Delete</button>
                                 <input type="email" name="email" value="{{ session.email }}" required
                                        class="w-full px-4 py-3 bg-white dark:bg-dark-2 border border-stroke dark:border-dark-3 rounded-lg text-body-color focus:border-primary focus:outline-none transition">
                             </div>
-                            
+
                             <div>
                                 <label class="block text-sm font-semibold text-body-color mb-2">
                                     Phone Number
@@ -349,7 +349,7 @@ Delete</button>
                                 <input type="tel" name="phone" value="{{ session.phone or '' }}"
                                        class="w-full px-4 py-3 bg-white dark:bg-dark-2 border border-stroke dark:border-dark-3 rounded-lg text-body-color focus:border-primary focus:outline-none transition">
                             </div>
-                            
+
                             <div>
                                 <label class="block text-sm font-semibold text-body-color mb-2">
                                     Hostel/Location
@@ -357,8 +357,8 @@ Delete</button>
                                 <input type="text" name="hostel" value="{{ session.hostel or '' }}"
                                        class="w-full px-4 py-3 bg-white dark:bg-dark-2 border border-stroke dark:border-dark-3 rounded-lg text-body-color focus:border-primary focus:outline-none transition">
                             </div>
-                            
-                            <button type="submit" 
+
+                            <button type="submit"
                                     class="w-full px-6 py-3 bg-primary text-white rounded-lg font-semibold hover:bg-blue-dark transition">
                                 <i class="fas fa-save mr-2"></i>Save Changes
                             </button>
@@ -374,8 +374,8 @@ Delete</button>
                         <p class="text-sm text-body-color dark:text-dark-6 mb-4">
                             Once you delete your account, there is no going back. All your listings and data will be permanently deleted.
                         </p>
-                        
-                        <button onclick="confirmDeleteAccount()" 
+
+                        <button onclick="confirmDeleteAccount()"
                                 class="px-6 py-3 bg-red-900 text-body-color dark:text-dark-6 rounded-lg font-semibold hover:bg-opacity-80 transition">
                             <i class="fas fa-trash mr-2"></i>Delete Account
                         </button>
