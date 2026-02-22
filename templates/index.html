@@ -4,6 +4,8 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="ShareSpace — a campus item swap platform exclusively for students. 
+    List, find, and exchange items with fellow students for free." />
     <title>
       ShareSpace
     </title>
@@ -15,12 +17,6 @@
     <link rel="stylesheet" href="../static/css/swiper-bundle.min.css" />
     <link rel="stylesheet" href="../static/css/animate.css" />
     <link rel="stylesheet" href="../static/css/tailwind.css" />
-
-    <!-- ==== WOW JS ==== -->
-    <script src="../static/js/wow.min.js"></script>
-    <script>
-      new WOW().init();
-    </script>
   </head>
 
   <body>
@@ -35,16 +31,14 @@
               <img
                 src="../static/images/logo/logo-white.svg"
                 alt="logo"
-                class="header-logo w-full"
+                class="header-logo w-full max-h-10 object-contain"
               />
             </a>
           </div>
           <div class="flex w-full items-center justify-between px-4">
             <div>
-              <button
-                id="navbarToggler"
-                class="absolute right-4 top-1/2 block -translate-y-1/2 rounded-lg px-3 py-[6px] ring-primary focus:ring-2 lg:hidden"
-              >
+              <button id="navbarToggler"
+  class="block lg:hidden ml-2 rounded-lg px-3 py-[6px] ring-primary focus:ring-2">
                 <span
                   class="relative my-[6px] block h-[2px] w-[30px] bg-white"
                 ></span>
@@ -62,7 +56,7 @@
               <ul class="block lg:flex 2xl:ml-20">
                 <li class="group relative">
                   <a
-                    href="{{ url_for('index') }}"
+                    href="#home"
                     class="ud-menu-scroll mx-8 flex py-2 text-base font-medium text-dark group-hover:text-primary dark:text-white lg:mr-0 lg:inline-flex lg:px-0 lg:py-6 lg:text-white lg:group-hover:text-white lg:group-hover:opacity-70"
                   >
                     Home
@@ -96,17 +90,18 @@
             </nav>
             
             </div>
-            <div class="flex items-center justify-end pr-16 lg:pr-0">
-              <div class="hidden sm:flex">
+            <div class="flex items-center justify-end">
+              <div class="flex sm:flex">
                 <a
                   href="{{ url_for('signin') }}"
-                  class="loginBtn px-[22px] py-2 text-base font-medium text-white hover:opacity-70"
+                  class="loginBtn px-[22px] py-2 text-base font-medium text-white text-sm hover:opacity-70"
                 >
                   Sign In
                 </a>
                 <a
                   href="{{ url_for('signup') }}"
-                  class="signUpBtn rounded-md bg-white bg-opacity-20 px-6 py-2 text-base font-medium text-white duration-300 ease-in-out hover:bg-opacity-100 hover:text-dark"
+                  class="signUpBtn rounded-md bg-white px-6 py-2 text-base font-medium text-primary 
+       duration-300 ease-in-out hover:bg-opacity-90"
                 >
                   Sign Up
                 </a>
@@ -1504,7 +1499,7 @@
                 </p>
 
                 <a
-                  href="javascript:void(0)"
+                  href="#features"
                   class="inline-flex items-center justify-center rounded-md border border-primary bg-primary px-7 py-3 text-center text-base font-medium text-white hover:border-blue-dark hover:bg-blue-dark"
                 >
                   Know More
@@ -1540,19 +1535,7 @@
                   <div
                     class="relative z-10 mb-4 flex items-center justify-center overflow-hidden bg-primary px-6 py-12 sm:mb-8 sm:h-[160px] sm:p-5 lg:mb-4 xl:mb-8"
                   >
-                    <div>
-                      <span class="block text-5xl font-extrabold text-white">
-                        09
-                      </span>
-                      <span class="block text-base font-semibold text-white">
-                        We have
-                      </span>
-                      <span
-                        class="block text-base font-medium text-white text-opacity-70"
-                      >
-                        Years of experience
-                      </span>
-                    </div>
+
                     <div>
                       <span class="absolute left-0 top-0 -z-10">
                         <svg
@@ -1693,8 +1676,8 @@
                 <p
                   class="mx-auto mb-6 max-w-[515px] text-base leading-[1.5] text-white"
                 >
-                  There are many variations of passages of Lorem Ipsum but the
-                  majority have suffered in some form.
+                  Ready to start swapping on campus? Join hundreds of students already 
+                  exchanging items on ShareSpace — no money, no hassle.
                 </p>
                 <a
                   href="{{ url_for('signup') }}"
@@ -1794,8 +1777,8 @@
               <p
                 class="mx-auto max-w-[485px] text-base text-body-color dark:text-dark-6"
               >
-                There are many variations of passages of Lorem Ipsum available
-                but the majority have suffered alteration in some form.
+                Got questions about how ShareSpace works?
+                 We've got answers to the most common ones below
               </p>
             </div>
           </div>
@@ -2841,7 +2824,7 @@
           <div class="w-full px-4 sm:w-1/2 md:w-1/2 lg:w-4/12 xl:w-3/12">
             <div class="w-full mb-10">
               <a href="javascript:void(0)" class="mb-6 inline-block max-w-[160px]">
-                <img src="assets/images/logo/logo-white.svg" alt="logo" class="max-w-full" />
+                <img src="../static/images/logo/logo-white.svg" alt="logo" class="max-w-full" />
               </a>
               <p class="mb-8 max-w-[270px] text-base text-gray-7">
                 An online platform for exchange between on-campus students.
@@ -2965,30 +2948,7 @@
               </ul>
             </div>
           </div>
-          <div class="w-full px-4 md:w-2/3 lg:w-6/12 xl:w-3/12">
-            <div class="w-full mb-10">
-              <h4 class="text-lg font-semibold text-white mb-9">Latest blog</h4>
-              <div class="flex flex-col gap-8">
-                <a href="blog-details.html" class="group flex items-center gap-[22px]">
-                  <div class="overflow-hidden rounded">
-                    <img src="../static/images/blog/blog-footer-01.jpg" alt="blog">
-                  </div>
-                  <span class="max-w-[180px] text-gray-7 text-base group-hover:text-white">
-                    I think really important to design with...
-                  </span>
-                </a>
-                <a href="blog-details.html" class="group flex items-center gap-[22px]">
-                  <div class="overflow-hidden rounded">
-                    <img src="../static/images/blog/blog-footer-02.jpg" alt="blog">
-                  </div>
-                  <span class="max-w-[180px] text-gray-7 text-base group-hover:text-white">
-                    Recognizing the need is the primary...
-                  </span>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
+
       </div>
   
       <div class="mt-12 border-t border-[#8890A4] border-opacity-40 py-8 lg:mt-[60px]">
@@ -3026,11 +2986,11 @@
   
       <div>
         <span class="absolute left-0 top-0 z-[-1]">
-          <img src="assets/images/footer/shape-1.svg" alt="" />
+          <img src="../static/images/footer/shape-1.svg" alt="" />
         </span>
   
         <span class="absolute bottom-0 right-0 z-[-1]">
-          <img src="assets/images/footer/shape-3.svg" alt="" />
+          <img src="../static/images/footer/shape-3.svg" alt="" />
         </span>
   
         <span class="absolute top-0 right-0 z-[-1]">
@@ -3201,8 +3161,8 @@
 
     <!-- ====== All Scripts -->
 
-    <script src="assets/js/swiper-bundle.min.js"></script>
-      <script src="../static/js/main.js"></script>
+    <script src="../static/js/swiper-bundle.min.js"></script>
+    <script src="../static/js/main.js"></script>
 
     <script>
       // ==== for menu scroll
@@ -3246,33 +3206,6 @@
       }
 
       window.document.addEventListener("scroll", onScroll);
-
-      // Testimonial
-      const testimonialSwiper = new Swiper(".testimonial-carousel", {
-        slidesPerView: 1,
-        spaceBetween: 30,
-
-        // Navigation arrows
-        navigation: {
-          nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev",
-        },
-
-        breakpoints: {
-          640: {
-            slidesPerView: 2,
-            spaceBetween: 30,
-          },
-          1024: {
-            slidesPerView: 3,
-            spaceBetween: 30,
-          },
-          1280: {
-            slidesPerView: 3,
-            spaceBetween: 30,
-          },
-        },
-      });
     </script>
   </body>
 </html>

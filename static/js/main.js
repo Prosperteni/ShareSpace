@@ -19,10 +19,10 @@
       // === logo change
       if (ud_header.classList.contains("sticky")) {
         document.querySelector(".header-logo").src =
-          "assets/images/logo/logo.svg"
+          "../static/images/logo/logo-white.svg"
       } else {
         document.querySelector(".header-logo").src =
-          "assets/images/logo/logo-white.svg"
+          "../static/images/logo/logo-white.svg"
       }
     }
 
@@ -31,23 +31,21 @@
         // === logo change
         if (ud_header.classList.contains("sticky")) {
           document.querySelector(".header-logo").src =
-            "assets/images/logo/logo-white.svg"
+            "../static/images/logo/logo-white.svg"
         } 
       }
     }
 
     // show or hide the back-top-top button
-    const backToTop = document.querySelector(".back-to-top");
-    if (backToTop) {
-      if (
-        document.body.scrollTop > 50 ||
-        document.documentElement.scrollTop > 50
-      ) {
-        backToTop.style.display = "flex";
-      } else {
-        backToTop.style.display = "none";
-      }
-    }
+   window.addEventListener('scroll', () => {
+  const backToTop = document.querySelector(".back-to-top");
+  if (!backToTop) return;
+  if (document.documentElement.scrollTop > 50) {
+    backToTop.style.display = "flex";
+  } else {
+    backToTop.style.display = "none";
+  }
+});
   };
 
   // ===== responsive navbar
