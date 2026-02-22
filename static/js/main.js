@@ -1,55 +1,46 @@
 (function () {
   "use strict";
 
-  // ======= Sticky
-  window.onscroll = function () {
+  // ======= Sticky header + logo swap + back-to-top visibility
+  // Single consolidated scroll handler — no nested listeners
+  window.addEventListener("scroll", function () {
     const ud_header = document.querySelector(".ud-header");
-    if (!ud_header) return; // Add this check
-    
-    const sticky = ud_header.offsetTop;
-    const logo = document.querySelectorAll(".header-logo");
+    if (!ud_header) return;
 
-    if (window.pageYOffset > sticky) {
+    const logo = document.querySelector(".header-logo");
+
+    // Sticky class toggle
+    if (window.pageYOffset > 0) {
       ud_header.classList.add("sticky");
     } else {
       ud_header.classList.remove("sticky");
     }
 
-    if(logo.length) {
-      // === logo change
+    // Logo swap — use ../static/ paths
+    if (logo) {
+      const isDark = document.documentElement.classList.contains("dark");
       if (ud_header.classList.contains("sticky")) {
-        document.querySelector(".header-logo").src =
-          "../static/images/logo/logo-white.svg"
+        logo.src = isDark
+          ? "../static/images/logo/logo-white.svg"
+          : "../static/images/logo/logo.svg";
       } else {
-        document.querySelector(".header-logo").src =
-          "../static/images/logo/logo-white.svg"
+        logo.src = "../static/images/logo/logo-white.svg";
       }
     }
 
-    if (document.documentElement.classList.contains("dark")) {
-      if(logo.length) {
-        // === logo change
-        if (ud_header.classList.contains("sticky")) {
-          document.querySelector(".header-logo").src =
-            "../static/images/logo/logo-white.svg"
-        } 
+    // Back-to-top button visibility
+    const backToTop = document.querySelector(".back-to-top");
+    if (backToTop) {
+      if (document.documentElement.scrollTop > 50) {
+        backToTop.style.display = "flex";
+      } else {
+        backToTop.style.display = "none";
       }
     }
+  });
 
-    // show or hide the back-top-top button
-   window.addEventListener('scroll', () => {
-  const backToTop = document.querySelector(".back-to-top");
-  if (!backToTop) return;
-  if (document.documentElement.scrollTop > 50) {
-    backToTop.style.display = "flex";
-  } else {
-    backToTop.style.display = "none";
-  }
-});
-  };
-
-  // ===== responsive navbar
-  let navbarToggler = document.querySelector("#navbarToggler");
+  // ===== Responsive navbar toggle
+  const navbarToggler = document.querySelector("#navbarToggler");
   const navbarCollapse = document.querySelector("#navbarCollapse");
 
   if (navbarToggler && navbarCollapse) {
@@ -58,7 +49,7 @@
       navbarCollapse.classList.toggle("hidden");
     });
 
-    //===== close navbar-collapse when a  clicked
+    // Close on nav link click
     document
       .querySelectorAll("#navbarCollapse ul li:not(.submenu-item) a")
       .forEach((e) =>
@@ -67,13 +58,12 @@
           navbarCollapse.classList.add("hidden");
         })
       );
-  
-    // 🔥 Close when clicking outside
+
+    // Close when clicking outside
     document.addEventListener("click", (event) => {
       const isClickInside =
         navbarCollapse.contains(event.target) ||
         navbarToggler.contains(event.target);
-
       if (!isClickInside) {
         navbarToggler.classList.remove("navbarTogglerActive");
         navbarCollapse.classList.add("hidden");
@@ -81,7 +71,7 @@
     });
   }
 
-  // ===== Sub-menu
+  // ===== Sub-menu toggle
   const submenuItems = document.querySelectorAll(".submenu-item");
   submenuItems.forEach((el) => {
     el.querySelector("a").addEventListener("click", () => {
@@ -89,7 +79,7 @@
     });
   });
 
-  // ===== Faq accordion
+  // ===== FAQ accordion
   const faqs = document.querySelectorAll(".single-faq");
   faqs.forEach((el) => {
     el.querySelector(".faq-btn").addEventListener("click", () => {
@@ -98,56 +88,66 @@
     });
   });
 
-  // ===== wow js
-  new WOW().init();
-
-  // ====== scroll top js
-  function scrollTo(element, to = 0, duration = 500) {
-    const start = element.scrollTop;
-    const change = to - start;
-    const increment = 20;
-    let currentTime = 0;
-
-    const animateScroll = () => {
-      currentTime += increment;
-
-      const val = Math.easeInOutQuad(currentTime, start, change, duration);
-
-      element.scrollTop = val;
-
-      if (currentTime < duration) {
-        setTimeout(animateScroll, increment);
-      }
-    };
-
-    animateScroll();
+  // ===== WOW.js — initialised once here only (remove from index.html <head>)
+  if (typeof WOW !== "undefined") {
+    new WOW().init();
   }
 
-  Math.easeInOutQuad = function (t, b, c, d) {
-    t /= d / 2;
-    if (t < 1) return (c / 2) * t * t + b;
-    t--;
-    return (-c / 2) * (t * (t - 2) - 1) + b;
-  };
-
+  // ===== Back-to-top smooth scroll (uses native scroll-smooth from html tag)
   const backToTopBtn = document.querySelector(".back-to-top");
   if (backToTopBtn) {
-    backToTopBtn.onclick = () => {
-      scrollTo(document.documentElement);
-    };
-  }
-
-  // ===== Password Toggle
-  const togglePassword = document.querySelector('#togglePassword');
-  const password = document.querySelector('input[name="password"]');
-
-  if (togglePassword && password) {
-    togglePassword.addEventListener('click', () => {
-      const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
-      password.setAttribute('type', type);
-      togglePassword.classList.toggle('bi-eye');
-      togglePassword.classList.toggle('bi-eye-fill');
+    backToTopBtn.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
     });
   }
 
+  // ===== Smooth scroll for nav links + active state on scroll
+  // Consolidated from inline index.html script — handles both behaviours
+  const menuScrollLinks = document.querySelectorAll(".ud-menu-scroll");
+
+  menuScrollLinks.forEach((link) => {
+    link.addEventListener("click", (e) => {
+      const href = link.getAttribute("href");
+      if (!href || !href.startsWith("#")) return; // skip non-hash links
+      const target = document.querySelector(href);
+      if (!target) return;
+      e.preventDefault();
+      target.scrollIntoView({ behavior: "smooth" });
+    });
+  });
+
+  function updateActiveNavLink() {
+    const scrollPos = window.pageYOffset || document.documentElement.scrollTop;
+
+    menuScrollLinks.forEach((link) => {
+      const href = link.getAttribute("href");
+      if (!href || !href.startsWith("#")) return;
+      const section = document.querySelector(href);
+      if (!section) return;
+
+      const sectionTop = section.offsetTop - 80;
+      const sectionBottom = sectionTop + section.offsetHeight;
+
+      if (scrollPos >= sectionTop && scrollPos < sectionBottom) {
+        menuScrollLinks.forEach((l) => l.classList.remove("active"));
+        link.classList.add("active");
+      }
+    });
+  }
+
+  window.addEventListener("scroll", updateActiveNavLink);
+
+  // ===== Password toggle (signin/signup pages)
+  const togglePassword = document.querySelector("#togglePassword");
+  const password = document.querySelector('input[name="password"]');
+
+  if (togglePassword && password) {
+    togglePassword.addEventListener("click", () => {
+      const type =
+        password.getAttribute("type") === "password" ? "text" : "password";
+      password.setAttribute("type", type);
+      togglePassword.classList.toggle("bi-eye");
+      togglePassword.classList.toggle("bi-eye-fill");
+    });
+  }
 })();
