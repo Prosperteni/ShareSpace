@@ -149,13 +149,32 @@ def dashboard():
         (user_id,)
     ).fetchone()[0]
 
+    pending_requests = db.execute(
+    "SELECT COUNT(*) FROM swap_requests WHERE owner_id = ? AND status = 'pending'",
+    (user_id,)
+    ).fetchone()[0]
+    
+    completed_swaps = db.execute(
+    "SELECT COUNT(*) FROM swap_requests WHERE owner_id = ? AND status = 'accepted'",
+    (user_id,)
+    ).fetchone()[0]
+
+    total_attempts = db.execute(
+    "SELECT COUNT(*) FROM swap_requests WHERE owner_id = ?",
+    (user_id,)
+    ).fetchone()[0]
+    
+    success_rate = round((completed_swaps / total_attempts * 100) if total_attempts else 0)
+
+
     stats = {
         "active_offers": active_offers,
-        "pending_requests": 11,     # placeholder
-        "completed_swaps": 11,      # placeholder
+        "pending_requests": pending_requests,
+        "total_views": total_views, #consider emoving this if it doesn't make sense to show
+        "completed_swaps": completed_swaps,
         "matches": 0,              # placeholder
-        "success_rate": 0,
-        "total_attempts": 0
+        "success_rate": success_rate,
+        "total_attempts": total_attempts
     }
 
     return render_template(
@@ -274,15 +293,16 @@ def respond_to_swap(request_id):
         status=action
     )
 
+
+
 @app.route("/swap/request/<int:item_id>", methods=["POST"])
 def request_swap(item_id):
     if "user_id" not in session:
-        return redirect(url_for("login"))
+        return redirect(url_for("signin"))
 
     user_id = session["user_id"]
     db = get_db()
 
-    # Get item info
     item = db.execute("""
         SELECT id, owner_id, is_active
         FROM items
@@ -291,39 +311,27 @@ def request_swap(item_id):
 
     if not item:
         return "Item not found", 404
-
-    # Prevent requesting your own item
     if item["owner_id"] == user_id:
         return "You cannot request your own item", 403
-
-    # Prevent requesting unavailable item
     if item["is_active"] != 1:
         return "Item not available", 400
 
-    # Prevent duplicate pending requests
     existing = db.execute("""
         SELECT id FROM swap_requests
         WHERE item_id = ? AND requester_id = ? AND status = 'pending'
     """, (item_id, user_id)).fetchone()
-
     if existing:
         flash("Request already sent.", "warning")
-        return redirect(url_for("item_detail", item_id=item_id))
+        return redirect(url_for("browse_items", item_id=item_id))
 
-
-    # Insert swap request
     db.execute("""
         INSERT INTO swap_requests (item_id, requester_id, owner_id, status)
         VALUES (?, ?, ?, 'pending')
     """, (item_id, user_id, item["owner_id"]))
-
     db.commit()
 
-    
     flash("Swap request sent successfully.", "success")
-    return redirect(url_for("browse_items", item_id=item_id, existing=True))
-
-
+    return redirect(url_for("browse_items", item_id=item_id,))
 
 
 
@@ -392,14 +400,17 @@ def change_password():
     
     # Verify current password
     db = get_db()
-    user = db.execute('SELECT password FROM users WHERE id = ?', (session['user_id'],)).fetchone()
-    
-    if not user or not check_password_hash(user['password'], current_password):
+    user = db.execute('SELECT password_hash FROM users WHERE id = ?', (session['user_id'],)).fetchone()
+
+    # Check current password
+    if not user or not check_password_hash(user['password_hash'], current_password):
         return redirect(url_for('profile', error='Current password is incorrect'))
-    
-    # Update password
+
+    # Hash the new password
     hashed_password = generate_password_hash(new_password)
-    db.execute('UPDATE users SET password = ? WHERE id = ?', (hashed_password, session['user_id']))
+
+    # Update the password in the database
+    db.execute('UPDATE users SET password_hash = ? WHERE id = ?', (hashed_password, session['user_id']))
     db.commit()
     
     return redirect(url_for('profile', success='Password updated successfully'))
@@ -440,9 +451,7 @@ def update_profile():
     # Update session
     session['username'] = username
     session['email'] = email
-    session['phone'] = phone
-    session['hostel'] = hostel
-    
+
     return redirect(url_for('profile', success='Profile updated successfully'))
 
 # Delete Account Route
@@ -558,12 +567,17 @@ def browse_items():
                          items=items, 
                          username=session.get("username"))
 
+
+
 @app.route('/item/<int:item_id>')
 def item_detail(item_id):
     if 'user_id' not in session:
-        return redirect(url_for('login'))
+        return redirect(url_for('signin'))
 
+    user_id = session.get("user_id")
     db = get_db()
+    
+    # Fetch item and owner info
     item = db.execute("""
         SELECT 
             i.id,
@@ -573,18 +587,35 @@ def item_detail(item_id):
             i.condition,
             i.image,
             i.created_at,
+            i.is_active,
+            u.id as owner_id,
             u.username AS owner_name,
             u.phone AS owner_phone,
             u.hostel AS owner_hostel
         FROM items i
         JOIN users u ON i.owner_id = u.id
-        WHERE i.id = :item_id
+        WHERE i.id = ?
     """, (item_id,)).fetchone()
 
     if not item:
         return redirect(url_for('browse_items'))
 
-    return render_template('items_detail.html', item=item, username=session.get("username"))
+    # Check if current user already requested this item
+    requested = False
+    if user_id:
+        existing = db.execute("""
+            SELECT 1 FROM swap_requests
+            WHERE item_id = ? AND requester_id = ? AND status = 'pending'
+        """, (item_id, user_id)).fetchone()
+        requested = bool(existing)
+
+    return render_template(
+        'items_detail.html', 
+        item=item, 
+        username=session.get("username"), 
+        requested=requested
+    )
+
 
 # Upload/Add Item Route
 @app.route('/upload', methods=['GET', 'POST'])
@@ -673,7 +704,7 @@ def upload():
 def save_item(item_id):
     if 'user_id' not in session:
         flash("Please login first.", "danger")
-        return redirect(url_for("login"))
+        return redirect(url_for("signin"))
 
     user_id = session['user_id']
     db = get_db()
@@ -722,7 +753,7 @@ def save_item(item_id):
 def unsave_item(item_id):
     if 'user_id' not in session:
         flash("Please login first.", "danger")
-        return redirect(url_for("login"))
+        return redirect(url_for("signin"))
 
     db = get_db()
 
