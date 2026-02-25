@@ -128,10 +128,17 @@
 
         <!-- Profile info -->
         <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600
-                        flex items-center justify-center text-white font-bold">
-                {{ username[0]|upper }}
+            <div class="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
+        {% if session.get('profile_picture') %}
+            <img src="{{ url_for('static', filename='uploads/' + session.profile_picture) }}"
+                 class="w-full h-full object-cover"
+                 alt="Profile Picture">
+        {% else %}
+            <div class="w-full h-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-sm">
+                {{ session.username[0].upper() }}
             </div>
+        {% endif %}
+    </div>
 
             <div>
                 <h4 class="text-white text-sm font-semibold">{{ username }}</h4>

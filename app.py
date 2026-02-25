@@ -369,6 +369,10 @@ def profile():
       AND items.is_active = 1
     """, (session['user_id'],)).fetchall()
 
+    user = db.execute("SELECT profile_picture FROM users WHERE id = ?", (user_id,)).fetchone()
+    if user and user["profile_picture"]:
+        session["profile_picture"] = user["profile_picture"]
+
 
     return render_template(
         "profile.html",
@@ -453,6 +457,72 @@ def update_profile():
     session['email'] = email
 
     return redirect(url_for('profile', success='Profile updated successfully'))
+@app.route("/profile/upload-picture", methods=["POST"])
+def upload_profile_picture():
+    if "user_id" not in session:
+        return redirect(url_for("signin"))
+
+    if "profile_picture" not in request.files:
+        flash("No file selected.", "error")
+        return redirect(url_for("profile"))
+
+    file = request.files["profile_picture"]
+
+    if file.filename == "":
+        flash("No file selected.", "error")
+        return redirect(url_for("profile"))
+
+    allowed_extensions = {"png", "jpg", "jpeg", "webp"}
+    ext = file.filename.rsplit(".", 1)[-1].lower()
+
+    if ext not in allowed_extensions:
+        flash("Invalid file type. Use PNG, JPG, or WEBP.", "error")
+        return redirect(url_for("profile"))
+
+    # Create unique filename
+    filename = f"profile_{session['user_id']}.{ext}"
+    save_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+    file.save(save_path)
+
+    # Update DB
+    db = get_db()
+    db.execute("UPDATE users SET profile_picture = ? WHERE id = ?",
+               (filename, session["user_id"]))
+    db.commit()
+
+    # Update session
+    session["profile_picture"] = filename
+
+    flash("Profile picture updated!", "success")
+    return redirect(url_for("profile"))
+
+@app.route("/profile/delete-picture", methods=["POST"])
+def delete_profile_picture():
+    if "user_id" not in session:
+        return redirect(url_for("signin"))
+
+    db = get_db()
+    user = db.execute("SELECT profile_picture FROM users WHERE id = ?", 
+                      (session["user_id"],)).fetchone()
+
+    if user and user["profile_picture"]:
+        # Delete file from disk
+        file_path = os.path.join(app.config["UPLOAD_FOLDER"], user["profile_picture"])
+        if os.path.exists(file_path):
+            os.remove(file_path)
+
+        # Clear from DB
+        db.execute("UPDATE users SET profile_picture = NULL WHERE id = ?", 
+                   (session["user_id"],))
+        db.commit()
+
+        # Clear from session
+        session.pop("profile_picture", None)
+
+    flash("Profile picture removed.", "success")
+    return redirect(url_for("profile"))
+
+
 
 # Delete Account Route
 @app.route('/delete-account')

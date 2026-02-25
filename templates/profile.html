@@ -36,25 +36,70 @@
     <div class="lg:col-span-1">
         <div class="bg-white dark:bg-dark-2 rounded-xl p-6 shadow-lg">
 
-            <!-- Profile Picture -->
-            <div class="text-center mb-6">
-                <div class="w-32 h-32 rounded-full bg-gradient-to-br from-primary to-purple mx-auto flex items-center justify-center text-primary text-4xl font-bold mb-4">
-                    {{ session.username[0].upper() }}
-                </div>
-                <h2 class="text-xl font-bold text-primary mb-1">
-                    {{ session.username }}
-                </h2>
-                <p class="text-sm text-body-color">
-                    {{ session.email }}
-                </p>
-                <p class="text-xs text-body-color mt-1">
-                    <i class="fas fa-map-marker-alt mr-1"></i>{{ session.hostel or 'Campus' }}
-                </p>
-                <p class="text-xs text-body-color mt-1">
-                    <i class="fas fa-phone mr-1"></i>{{ session.phone or 'No phone' }}
-                </p>
-            </div>
 
+<!-- Profile Picture Card -->
+<div class="flex items-center gap-6 mb-6">
+
+    <!-- Avatar -->
+    <div class="relative w-24 h-24 flex-shrink-0">
+        {% if session.get('profile_picture') %}
+            <img src="{{ url_for('static', filename='uploads/' + session.profile_picture) }}"
+                 class="w-full h-full rounded-full object-cover ring-4 ring-primary ring-opacity-30"
+                 alt="Profile Picture">
+        {% else %}
+            <div class="w-full h-full rounded-full bg-gradient-to-br from-primary to-purple flex items-center justify-center text-primary text-3xl font-bold ring-4 ring-primary ring-opacity-30">
+                {{ session.username[0].upper() }}
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Info + Buttons -->
+    <div class="flex-1 min-w-0">
+        <h2 class="text-lg font-bold text-body-color mb-0.5 truncate">{{ session.username }}</h2>
+        <p class="text-sm text-body-color truncate">{{ session.email }}</p>
+        <p class="text-xs text-body-color mt-1">
+            <i class="fas fa-map-marker-alt mr-1"></i>{{ session.hostel or 'Campus' }}
+        </p>
+        <p class="text-xs text-body-color mt-1 mb-3">
+            <i class="fas fa-phone mr-1"></i>{{ session.phone or 'No phone' }}
+        </p>
+
+        <!-- Action Buttons -->
+        <div class="flex items-center gap-2">
+
+            <!-- Upload/Change -->
+            <form id="profile-pic-form"
+                  action="{{ url_for('upload_profile_picture') }}"
+                  method="POST"
+                  enctype="multipart/form-data">
+                <input type="file"
+                       id="profile_pic_input"
+                       name="profile_picture"
+                       accept="image/png, image/jpeg, image/webp"
+                       class="hidden"
+                       onchange="document.getElementById('profile-pic-form').submit()">
+                <label for="profile_pic_input"
+                       class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 bg-primary text-white rounded-lg cursor-pointer hover:bg-blue-dark transition">
+                    <i class="fas fa-camera"></i>
+                    {{ 'Change Photo' if session.get('profile_picture') else 'Upload Photo' }}
+                </label>
+            </form>
+
+            <!-- Delete — only if picture exists -->
+            {% if session.get('profile_picture') %}
+            <form action="{{ url_for('delete_profile_picture') }}" method="POST">
+                <button type="submit"
+                        class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 border border-red border-opacity-40 text-red rounded-lg hover:bg-red hover:bg-opacity-10 transition">
+                    <i class="fas fa-trash-alt"></i>
+                    Remove
+                </button>
+            </form>
+            {% endif %}
+
+        </div>
+    </div>
+
+</div>
 
             <!-- Quick Actions -->
             <div class="space-y-2">
