@@ -105,6 +105,7 @@ def signup():
             return render_template("signup.html", error="Database error: " + str(e))
 
         session["username"] = username
+        session["profile_picture"] = None
         return redirect("/signin")
 
     return render_template("signup.html")
@@ -125,6 +126,7 @@ def signin():
         session["username"] = username
         session["user_id"] = row["id"]
         session["hostel"] = row["hostel"]
+        session["profile_picture"] = row["profile_picture"]
 
         return redirect("/dashboard")
 
