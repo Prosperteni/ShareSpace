@@ -562,10 +562,19 @@ def browse_items():
         query += " ORDER BY items.views DESC"
     
     items = db.execute(query, params).fetchall()
+
+    user_id = session.get("user_id")
+    requested_items = db.execute("""
+        SELECT item_id FROM swap_requests
+        WHERE requester_id = ? AND status = 'pending'
+    """, (user_id,)).fetchall()
+
+    requested_item_ids = {row['item_id'] for row in requested_items}
     
     return render_template('browseItems.html', 
                          items=items, 
-                         username=session.get("username"))
+                         username=session.get("username"),
+                         requested_item_ids=requested_item_ids)
 
 
 
